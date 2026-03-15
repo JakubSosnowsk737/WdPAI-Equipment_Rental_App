@@ -1,0 +1,10 @@
+.env
+*.log
+vendor/
+node_modules/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+public/uploads/*
+!public/uploads/.gitkeep
