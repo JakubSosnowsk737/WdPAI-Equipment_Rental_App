@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: wypozyczalnia
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  php:
+    image: php:8.2-fpm
+    volumes:
+      - ./:/var/www/html
+
+volumes:
+  db_data:
