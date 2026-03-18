@@ -13,9 +13,13 @@ services:
       - db_data:/var/lib/postgresql/data
 
   php:
-    image: php:8.2-fpm
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
     volumes:
       - ./:/var/www/html
+    depends_on:
+      - db
 
 volumes:
   db_data:
