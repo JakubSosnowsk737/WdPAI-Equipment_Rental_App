@@ -1,5 +1,7 @@
 <?php
-// Pierwszy front-controller - na razie tylko statyczny powitalnik
+declare(strict_types=1);
+
+require_once dirname(__DIR__) . '/src/bootstrap.php';
 ?>
 <!DOCTYPE html>
 <html lang="pl">
