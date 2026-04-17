@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title><?= htmlspecialchars($title ?? 'Strona', ENT_QUOTES) ?></title>
-</head>
-<body>
-    <h1>WypozyczalniaPRO</h1>
-    <p>Witaj na stronie wypozyczalni sprzetu.</p>
-</body>
-</html>
+<?php ob_start(); ?>
+<section>
+    <h2>Witaj na stronie wypozyczalni sprzetu</h2>
+    <p><a href="/register" class="btn">Zarejestruj sie</a></p>
+</section>
+<?php
+$content = ob_get_clean();
+$title = $title ?? 'WypozyczalniaPRO';
+require __DIR__ . '/../layout.php';
