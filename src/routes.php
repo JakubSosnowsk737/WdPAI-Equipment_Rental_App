@@ -3,5 +3,9 @@ declare(strict_types=1);
 
 /** @var App\Core\Router $router */
 
-// Na razie pusto - kolejne kontrolery beda dodawane.
-$router->get('/', [App\Controllers\HomeController::class, 'index']);
+use App\Controllers\AuthController;
+use App\Controllers\HomeController;
+
+$router->get('/',         [HomeController::class, 'index']);
+$router->get('/register', [AuthController::class, 'showRegister']);
+$router->post('/register',[AuthController::class, 'register']);
