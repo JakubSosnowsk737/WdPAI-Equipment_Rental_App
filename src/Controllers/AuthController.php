@@ -30,4 +30,9 @@ final class AuthController extends AbstractController
         }
         $this->redirect('/login');
     }
+
+    public function showLogin(array $params = []): void
+    {
+        $this->render('auth/login', ['error' => null]);
+    }
 }
