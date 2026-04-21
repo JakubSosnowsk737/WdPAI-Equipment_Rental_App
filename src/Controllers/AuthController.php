@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Session;
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
 
@@ -34,5 +35,19 @@ final class AuthController extends AbstractController
     public function showLogin(array $params = []): void
     {
         $this->render('auth/login', ['error' => null]);
+    }
+
+    public function login(array $params = []): void
+    {
+        $email    = (string) $this->request->input('email', '');
+        $password = (string) $this->request->input('password', '');
+
+        $user = $this->auth->verify($email, $password);
+        if ($user === null) {
+            $this->render('auth/login', ['error' => 'Bledne dane logowania.'], 401);
+            return;
+        }
+        Session::login($user);
+        $this->redirect('/');
     }
 }
