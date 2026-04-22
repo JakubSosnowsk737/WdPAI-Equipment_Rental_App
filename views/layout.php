@@ -1,3 +1,7 @@
+<?php
+use App\Core\Session;
+Session::start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -8,7 +12,16 @@
 </head>
 <body>
     <header>
-        <h1>WypozyczalniaPRO</h1>
+        <a href="/" class="logo">WypozyczalniaPRO</a>
+        <nav>
+            <?php if (Session::isAuthenticated()): ?>
+                <span>Witaj, <?= htmlspecialchars((string) Session::userName(), ENT_QUOTES) ?></span>
+                <a href="/logout">Wyloguj</a>
+            <?php else: ?>
+                <a href="/login">Zaloguj</a>
+                <a href="/register">Zarejestruj</a>
+            <?php endif; ?>
+        </nav>
     </header>
     <main>
         <?= $content ?? '' ?>

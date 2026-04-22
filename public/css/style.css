@@ -13,6 +13,21 @@ header {
     background: #1f3a5f;
     color: #fff;
     padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header a, header .logo {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+header .logo {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-left: 0;
 }
 
 main {

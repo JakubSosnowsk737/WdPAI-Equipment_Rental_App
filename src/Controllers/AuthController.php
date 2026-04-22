@@ -50,4 +50,10 @@ final class AuthController extends AbstractController
         Session::login($user);
         $this->redirect('/');
     }
+
+    public function logout(array $params = []): void
+    {
+        Session::logout();
+        $this->redirect('/');
+    }
 }
