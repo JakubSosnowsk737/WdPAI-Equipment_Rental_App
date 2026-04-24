@@ -24,6 +24,12 @@ Session::start();
         </nav>
     </header>
     <main>
+        <?php $flash = Session::flash('success'); if ($flash): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($flash, ENT_QUOTES) ?></div>
+        <?php endif; ?>
+        <?php $flash = Session::flash('error'); if ($flash): ?>
+            <div class="alert alert-error"><?= htmlspecialchars($flash, ENT_QUOTES) ?></div>
+        <?php endif; ?>
         <?= $content ?? '' ?>
     </main>
 </body>

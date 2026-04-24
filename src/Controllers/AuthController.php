@@ -29,6 +29,7 @@ final class AuthController extends AbstractController
             $this->render('auth/register', ['errors' => $errors], 422);
             return;
         }
+        Session::flash('success', 'Konto utworzone, mozesz sie zalogowac.');
         $this->redirect('/login');
     }
 
