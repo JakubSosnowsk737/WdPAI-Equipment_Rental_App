@@ -5,6 +5,13 @@ declare(strict_types=1);
 
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
+use App\Controllers\UserController;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\RoleMiddleware;
+use App\Models\User;
+
+$auth      = new AuthMiddleware();
+$adminOnly = [$auth, new RoleMiddleware([User::ROLE_ADMIN])];
 
 $router->get('/',         [HomeController::class, 'index']);
 $router->get('/register', [AuthController::class, 'showRegister']);
@@ -12,3 +19,7 @@ $router->post('/register',[AuthController::class, 'register']);
 $router->get('/login',    [AuthController::class, 'showLogin']);
 $router->post('/login',   [AuthController::class, 'login']);
 $router->get('/logout',   [AuthController::class, 'logout']);
+
+$router->get('/admin/users',                    [UserController::class, 'index'],      $adminOnly);
+$router->post('/admin/users/{id}/role',         [UserController::class, 'updateRole'], $adminOnly);
+$router->post('/admin/users/{id}/delete',       [UserController::class, 'delete'],     $adminOnly);
