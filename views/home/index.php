@@ -1,7 +1,8 @@
 <?php ob_start(); ?>
 <section>
     <h2>Witaj na stronie wypozyczalni sprzetu</h2>
-    <p><a href="/register" class="btn">Zarejestruj sie</a></p>
+    <p>Wypozyczaj wiertarki, rowery, narzedzia ogrodowe i wiecej.</p>
+    <p><a href="/equipment" class="btn">Zobacz katalog</a></p>
 </section>
 <?php
 $content = ob_get_clean();
