@@ -15,7 +15,8 @@ $auth      = new AuthMiddleware();
 $adminOnly = [$auth, new RoleMiddleware([User::ROLE_ADMIN])];
 
 $router->get('/',         [HomeController::class, 'index']);
-$router->get('/equipment',[EquipmentController::class, 'index']);
+$router->get('/equipment',           [EquipmentController::class, 'index']);
+$router->get('/equipment/{id}',      [EquipmentController::class, 'show']);
 $router->get('/register', [AuthController::class, 'showRegister']);
 $router->post('/register',[AuthController::class, 'register']);
 $router->get('/login',    [AuthController::class, 'showLogin']);

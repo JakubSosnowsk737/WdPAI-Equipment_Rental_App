@@ -12,6 +12,7 @@ ob_start();
                 <p><?= htmlspecialchars($eq->description ?? '', ENT_QUOTES) ?></p>
                 <p class="rate"><?= number_format($eq->dailyRate, 2) ?> zl / dzien</p>
                 <p>Dostepne: <?= $eq->availableQuantity ?> / <?= $eq->totalQuantity ?></p>
+                <a href="/equipment/<?= (int) $eq->id ?>" class="btn-sm">Szczegoly</a>
             </article>
         <?php endforeach; ?>
         <?php if (empty($items)): ?>

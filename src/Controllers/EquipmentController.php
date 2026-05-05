@@ -25,4 +25,16 @@ final class EquipmentController extends AbstractController
             'categories' => $this->categories->findAll(),
         ]);
     }
+
+    public function show(array $params): void
+    {
+        $id = (int) ($params['id'] ?? 0);
+        $eq = $this->equipment->findById($id);
+        if ($eq === null) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
+        }
+        $this->render('equipment/show', ['eq' => $eq]);
+    }
 }
