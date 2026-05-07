@@ -26,3 +26,7 @@ $router->get('/logout',   [AuthController::class, 'logout']);
 $router->get('/admin/users',                    [UserController::class, 'index'],      $adminOnly);
 $router->post('/admin/users/{id}/role',         [UserController::class, 'updateRole'], $adminOnly);
 $router->post('/admin/users/{id}/delete',       [UserController::class, 'delete'],     $adminOnly);
+
+$router->get('/admin/equipment',                [EquipmentController::class, 'adminIndex'],   $adminOnly);
+$router->get('/admin/equipment/new',            [EquipmentController::class, 'createForm'],   $adminOnly);
+$router->post('/admin/equipment',               [EquipmentController::class, 'create'],       $adminOnly);
