@@ -30,3 +30,6 @@ $router->post('/admin/users/{id}/delete',       [UserController::class, 'delete'
 $router->get('/admin/equipment',                [EquipmentController::class, 'adminIndex'],   $adminOnly);
 $router->get('/admin/equipment/new',            [EquipmentController::class, 'createForm'],   $adminOnly);
 $router->post('/admin/equipment',               [EquipmentController::class, 'create'],       $adminOnly);
+$router->get('/admin/equipment/{id}/edit',      [EquipmentController::class, 'editForm'],     $adminOnly);
+$router->post('/admin/equipment/{id}',          [EquipmentController::class, 'update'],       $adminOnly);
+$router->post('/admin/equipment/{id}/delete',   [EquipmentController::class, 'delete'],       $adminOnly);

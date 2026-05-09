@@ -83,6 +83,60 @@ final class EquipmentController extends AbstractController
         ]);
     }
 
+    public function editForm(array $params): void
+    {
+        $id = (int) ($params['id'] ?? 0);
+        $eq = $this->equipment->findById($id);
+        if ($eq === null) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
+        }
+        $this->render('admin/equipment/form', [
+            'eq'         => $eq,
+            'categories' => $this->categories->findAll(),
+            'errors'     => [],
+        ]);
+    }
+
+    public function update(array $params): void
+    {
+        $id = (int) ($params['id'] ?? 0);
+        $data = $this->request->all();
+        $errors = $this->validate($data);
+        if ($errors !== []) {
+            $this->render('admin/equipment/form', [
+                'eq'         => $this->equipment->findById($id),
+                'categories' => $this->categories->findAll(),
+                'errors'     => $errors,
+            ], 422);
+            return;
+        }
+        $total = (int) $data['total_quantity'];
+        $existing = $this->equipment->findById($id);
+        $avail = max(0, $total - ($existing ? $existing->totalQuantity - $existing->availableQuantity : 0));
+        $eq = new Equipment(
+            id:                $id,
+            categoryId:        (int) $data['category_id'],
+            name:              (string) $data['name'],
+            description:       (string) ($data['description'] ?? ''),
+            dailyRate:         (float) $data['daily_rate'],
+            totalQuantity:     $total,
+            availableQuantity: $avail,
+        );
+        $this->equipment->update($id, $eq);
+        Session::flash('success', 'Zaktualizowano sprzet.');
+        $this->redirect('/admin/equipment');
+    }
+
+    public function delete(array $params): void
+    {
+        $id = (int) ($params['id'] ?? 0);
+        $this->equipment->delete($id);
+        Session::flash('success', 'Usunieto sprzet.');
+        $this->redirect('/admin/equipment');
+    }
+
     /** @return string[] */
     private function validate(array $data): array
     {
