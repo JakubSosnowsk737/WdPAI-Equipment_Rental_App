@@ -33,3 +33,4 @@ $router->post('/admin/equipment',               [EquipmentController::class, 'cr
 $router->get('/admin/equipment/{id}/edit',      [EquipmentController::class, 'editForm'],     $adminOnly);
 $router->post('/admin/equipment/{id}',          [EquipmentController::class, 'update'],       $adminOnly);
 $router->post('/admin/equipment/{id}/delete',   [EquipmentController::class, 'delete'],       $adminOnly);
+$router->post('/admin/equipment/{id}/images',   [EquipmentController::class, 'uploadImage'],  $adminOnly);

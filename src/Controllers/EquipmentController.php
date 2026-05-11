@@ -6,18 +6,21 @@ namespace App\Controllers;
 use App\Core\Session;
 use App\Models\Equipment;
 use App\Repositories\CategoryRepository;
+use App\Repositories\EquipmentImageRepository;
 use App\Repositories\EquipmentRepository;
 
 final class EquipmentController extends AbstractController
 {
     private EquipmentRepository $equipment;
     private CategoryRepository $categories;
+    private EquipmentImageRepository $images;
 
     public function __construct()
     {
         parent::__construct();
         $this->equipment  = new EquipmentRepository();
         $this->categories = new CategoryRepository();
+        $this->images     = new EquipmentImageRepository();
     }
 
     public function index(array $params = []): void
@@ -37,7 +40,35 @@ final class EquipmentController extends AbstractController
             $this->render('errors/404');
             return;
         }
-        $this->render('equipment/show', ['eq' => $eq]);
+        $this->render('equipment/show', [
+            'eq'     => $eq,
+            'images' => $this->images->listForEquipment($id),
+        ]);
+    }
+
+    public function uploadImage(array $params): void
+    {
+        $id = (int) ($params['id'] ?? 0);
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            Session::flash('error', 'Blad uploadu pliku.');
+            $this->redirect('/admin/equipment/' . $id . '/edit');
+            return;
+        }
+        $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg','jpeg','png','webp'], true)) {
+            Session::flash('error', 'Niedozwolony format obrazka.');
+            $this->redirect('/admin/equipment/' . $id . '/edit');
+            return;
+        }
+        $dir = dirname(__DIR__, 2) . '/public/uploads';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+        $name = 'eq_' . $id . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+        move_uploaded_file($_FILES['image']['tmp_name'], $dir . '/' . $name);
+        $this->images->add($id, '/uploads/' . $name);
+        Session::flash('success', 'Dodano obraz.');
+        $this->redirect('/admin/equipment/' . $id . '/edit');
     }
 
     public function createForm(array $params = []): void

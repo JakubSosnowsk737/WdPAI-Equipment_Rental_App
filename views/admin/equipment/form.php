@@ -39,6 +39,15 @@ ob_start();
         </label>
         <button type="submit" class="btn"><?= $isEdit ? 'Zapisz' : 'Dodaj' ?></button>
     </form>
+
+    <?php if ($isEdit): ?>
+        <h3>Obrazki</h3>
+        <form method="post" enctype="multipart/form-data"
+              action="/admin/equipment/<?= (int) $eq->id ?>/images">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit" class="btn">Dodaj obraz</button>
+        </form>
+    <?php endif; ?>
 </section>
 <?php
 $content = ob_get_clean();

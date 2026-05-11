@@ -135,3 +135,15 @@ main {
     color: #2563eb;
     margin: 0.5rem 0;
 }
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.gallery img {
+    max-width: 200px;
+    border-radius: 6px;
+}

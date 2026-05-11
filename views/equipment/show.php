@@ -7,6 +7,13 @@ ob_start();
 <section class="equipment-detail">
     <p><a href="/equipment">&laquo; powrot do katalogu</a></p>
     <h2><?= htmlspecialchars($eq->name, ENT_QUOTES) ?></h2>
+    <?php if (!empty($images)): ?>
+        <div class="gallery">
+            <?php foreach ($images as $img): ?>
+                <img src="<?= htmlspecialchars($img, ENT_QUOTES) ?>" alt="">
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
     <p class="cat"><?= htmlspecialchars($eq->categoryName ?? '', ENT_QUOTES) ?></p>
     <p><?= nl2br(htmlspecialchars($eq->description ?? '', ENT_QUOTES)) ?></p>
     <p class="rate"><?= number_format($eq->dailyRate, 2) ?> zl / dzien</p>
