@@ -6,13 +6,16 @@ declare(strict_types=1);
 use App\Controllers\AuthController;
 use App\Controllers\EquipmentController;
 use App\Controllers\HomeController;
+use App\Controllers\RentalController;
 use App\Controllers\UserController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\RoleMiddleware;
 use App\Models\User;
 
-$auth      = new AuthMiddleware();
-$adminOnly = [$auth, new RoleMiddleware([User::ROLE_ADMIN])];
+$auth        = new AuthMiddleware();
+$adminOnly   = [$auth, new RoleMiddleware([User::ROLE_ADMIN])];
+$staffOnly   = [$auth, new RoleMiddleware([User::ROLE_ADMIN, User::ROLE_EMPLOYEE])];
+$loggedOnly  = [$auth];
 
 $router->get('/',         [HomeController::class, 'index']);
 $router->get('/equipment',           [EquipmentController::class, 'index']);
@@ -34,3 +37,5 @@ $router->get('/admin/equipment/{id}/edit',      [EquipmentController::class, 'ed
 $router->post('/admin/equipment/{id}',          [EquipmentController::class, 'update'],       $adminOnly);
 $router->post('/admin/equipment/{id}/delete',   [EquipmentController::class, 'delete'],       $adminOnly);
 $router->post('/admin/equipment/{id}/images',   [EquipmentController::class, 'uploadImage'],  $adminOnly);
+
+$router->get('/rentals/new',                    [RentalController::class, 'newForm'],         $loggedOnly);
