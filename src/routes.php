@@ -39,3 +39,4 @@ $router->post('/admin/equipment/{id}/delete',   [EquipmentController::class, 'de
 $router->post('/admin/equipment/{id}/images',   [EquipmentController::class, 'uploadImage'],  $adminOnly);
 
 $router->get('/rentals/new',                    [RentalController::class, 'newForm'],         $loggedOnly);
+$router->post('/rentals',                       [RentalController::class, 'create'],          $loggedOnly);
