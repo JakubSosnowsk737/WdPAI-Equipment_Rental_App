@@ -40,3 +40,4 @@ $router->post('/admin/equipment/{id}/images',   [EquipmentController::class, 'up
 
 $router->get('/rentals/new',                    [RentalController::class, 'newForm'],         $loggedOnly);
 $router->post('/rentals',                       [RentalController::class, 'create'],          $loggedOnly);
+$router->get('/rentals/mine',                   [RentalController::class, 'mine'],            $loggedOnly);

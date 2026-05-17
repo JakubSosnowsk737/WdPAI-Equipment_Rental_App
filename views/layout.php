@@ -15,7 +15,13 @@ Session::start();
         <a href="/" class="logo">WypozyczalniaPRO</a>
         <nav>
             <?php if (Session::isAuthenticated()): ?>
-                <span>Witaj, <?= htmlspecialchars((string) Session::userName(), ENT_QUOTES) ?></span>
+                <a href="/equipment">Katalog</a>
+                <a href="/rentals/mine">Moje wypozyczenia</a>
+                <?php if (Session::userRole() === 'admin'): ?>
+                    <a href="/admin/users">Uzytkownicy</a>
+                    <a href="/admin/equipment">Sprzet</a>
+                <?php endif; ?>
+                <span>| <?= htmlspecialchars((string) Session::userName(), ENT_QUOTES) ?></span>
                 <a href="/logout">Wyloguj</a>
             <?php else: ?>
                 <a href="/login">Zaloguj</a>

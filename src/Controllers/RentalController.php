@@ -52,4 +52,10 @@ final class RentalController extends AbstractController
         Session::flash('success', 'Wypozyczenie zalozone.');
         $this->redirect('/rentals/mine');
     }
+
+    public function mine(array $params = []): void
+    {
+        $list = $this->rentals->findByUser((int) Session::userId());
+        $this->render('rentals/mine', ['rentals' => $list]);
+    }
 }
