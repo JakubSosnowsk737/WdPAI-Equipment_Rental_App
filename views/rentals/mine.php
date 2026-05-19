@@ -9,7 +9,7 @@ ob_start();
     <?php else: ?>
         <table class="data-table">
             <thead>
-            <tr><th>ID</th><th>Od</th><th>Do</th><th>Status</th><th>Koszt</th></tr>
+            <tr><th>ID</th><th>Od</th><th>Do</th><th>Status</th><th>Koszt</th><th>Akcje</th></tr>
             </thead>
             <tbody>
             <?php /** @var Rental[] $rentals */ foreach ($rentals as $r): ?>
@@ -19,6 +19,13 @@ ob_start();
                     <td><?= htmlspecialchars($r->endDate, ENT_QUOTES) ?></td>
                     <td><?= htmlspecialchars($r->status, ENT_QUOTES) ?></td>
                     <td><?= number_format($r->totalCost, 2) ?> zl</td>
+                    <td>
+                        <?php if ($r->status !== 'zakonczone' && $r->status !== 'anulowane'): ?>
+                            <form method="post" action="/rentals/<?= (int) $r->id ?>/return" style="display:inline">
+                                <button class="btn-sm" type="submit">Zwroc</button>
+                            </form>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

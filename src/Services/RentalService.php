@@ -24,6 +24,42 @@ final class RentalService
     /**
      * @return array{ok:bool, rentalId?:int, error?:string}
      */
+    /**
+     * Zwrot - przywraca ilosci sprzetu i zmienia status na 'zakonczone'.
+     * @return array{ok:bool, error?:string}
+     */
+    public function returnRental(int $rentalId): array
+    {
+        $pdo = Database::getInstance()->pdo();
+        $pdo->beginTransaction();
+        try {
+            $rental = $this->rentals->findById($rentalId);
+            if ($rental === null) {
+                throw new RuntimeException('Wypozyczenie nie istnieje.');
+            }
+            if ($rental->status === Rental::STATUS_FINISHED) {
+                throw new RuntimeException('Juz zakonczone.');
+            }
+
+            $items = $pdo->prepare('SELECT equipment_id, quantity FROM rental_items WHERE rental_id = :id');
+            $items->execute(['id' => $rentalId]);
+            foreach ($items->fetchAll(PDO::FETCH_ASSOC) as $it) {
+                $upd = $pdo->prepare(
+                    'UPDATE equipment SET available_quantity = available_quantity + :q
+                     WHERE id = :id AND available_quantity + :q <= total_quantity'
+                );
+                $upd->execute(['q' => (int) $it['quantity'], 'id' => (int) $it['equipment_id']]);
+            }
+
+            $this->rentals->updateStatus($rentalId, Rental::STATUS_FINISHED);
+            $pdo->commit();
+            return ['ok' => true];
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            return ['ok' => false, 'error' => $e->getMessage()];
+        }
+    }
+
     public function rent(int $userId, int $equipmentId, int $quantity, string $startDate, string $endDate): array
     {
         if ($startDate > $endDate) {

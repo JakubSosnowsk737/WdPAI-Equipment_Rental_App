@@ -58,4 +58,25 @@ final class RentalController extends AbstractController
         $list = $this->rentals->findByUser((int) Session::userId());
         $this->render('rentals/mine', ['rentals' => $list]);
     }
+
+    public function returnRental(array $params): void
+    {
+        $id = (int) ($params['id'] ?? 0);
+        $rental = $this->rentals->findById($id);
+        if ($rental === null) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
+        }
+        // Klient moze zwrocic wlasne; admin/pracownik dowolne.
+        $role = Session::userRole();
+        if ($role === 'klient' && $rental->userId !== (int) Session::userId()) {
+            http_response_code(403);
+            $this->render('errors/403');
+            return;
+        }
+        $res = $this->service->returnRental($id);
+        Session::flash($res['ok'] ? 'success' : 'error', $res['ok'] ? 'Sprzet zwrocony.' : ($res['error'] ?? 'Blad zwrotu.'));
+        $this->redirect($role === 'klient' ? '/rentals/mine' : '/admin/rentals');
+    }
 }
