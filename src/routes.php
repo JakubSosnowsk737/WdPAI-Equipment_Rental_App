@@ -42,3 +42,4 @@ $router->get('/rentals/new',                    [RentalController::class, 'newFo
 $router->post('/rentals',                       [RentalController::class, 'create'],          $loggedOnly);
 $router->get('/rentals/mine',                   [RentalController::class, 'mine'],            $loggedOnly);
 $router->post('/rentals/{id}/return',            [RentalController::class, 'returnRental'],   $loggedOnly);
+$router->get('/admin/rentals',                   [RentalController::class, 'adminIndex'],     $staffOnly);

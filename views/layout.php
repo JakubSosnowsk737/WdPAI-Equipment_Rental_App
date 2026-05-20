@@ -21,6 +21,9 @@ Session::start();
                     <a href="/admin/users">Uzytkownicy</a>
                     <a href="/admin/equipment">Sprzet</a>
                 <?php endif; ?>
+                <?php if (in_array(Session::userRole(), ['admin','pracownik'], true)): ?>
+                    <a href="/admin/rentals">Wypozyczenia</a>
+                <?php endif; ?>
                 <span>| <?= htmlspecialchars((string) Session::userName(), ENT_QUOTES) ?></span>
                 <a href="/logout">Wyloguj</a>
             <?php else: ?>

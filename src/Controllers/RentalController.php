@@ -79,4 +79,11 @@ final class RentalController extends AbstractController
         Session::flash($res['ok'] ? 'success' : 'error', $res['ok'] ? 'Sprzet zwrocony.' : ($res['error'] ?? 'Blad zwrotu.'));
         $this->redirect($role === 'klient' ? '/rentals/mine' : '/admin/rentals');
     }
+
+    public function adminIndex(array $params = []): void
+    {
+        $this->render('admin/rentals/index', [
+            'rentals' => $this->rentals->findAllWithUser(),
+        ]);
+    }
 }
