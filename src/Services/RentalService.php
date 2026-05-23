@@ -96,12 +96,8 @@ final class RentalService
                 totalCost: $cost,
             );
             $rentalId = $this->rentals->create($rental);
+            // Trigger rental_items_after_insert sam zmniejszy available_quantity.
             $this->rentals->addItem($rentalId, $equipmentId, $quantity, $rate);
-
-            // Trigger zaktualizuje available_quantity automatycznie (commit #42).
-            // Do czasu jego wdrozenia robimy to recznie tutaj.
-            $upd = $pdo->prepare('UPDATE equipment SET available_quantity = available_quantity - :q WHERE id = :id');
-            $upd->execute(['q' => $quantity, 'id' => $equipmentId]);
 
             $pdo->commit();
             return ['ok' => true, 'rentalId' => $rentalId];
