@@ -1,10 +1,20 @@
 <?php
 use App\Models\Equipment;
+use App\Models\Category;
 ob_start();
 ?>
 <section>
     <h2>Dostepny sprzet</h2>
-    <div class="equipment-grid">
+    <div class="search-bar">
+        <input type="text" id="eq-search" placeholder="Szukaj sprzetu...">
+        <select id="eq-category">
+            <option value="">-- wszystkie kategorie --</option>
+            <?php /** @var Category[] $categories */ foreach ($categories as $c): ?>
+                <option value="<?= (int) $c->id ?>"><?= htmlspecialchars($c->name, ENT_QUOTES) ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div id="eq-grid" class="equipment-grid">
         <?php /** @var Equipment[] $items */ foreach ($items as $eq): ?>
             <article class="equipment-card">
                 <h3><?= htmlspecialchars($eq->name, ENT_QUOTES) ?></h3>
@@ -20,6 +30,7 @@ ob_start();
         <?php endif; ?>
     </div>
 </section>
+<script src="/js/search.js" defer></script>
 <?php
 $content = ob_get_clean();
 $title = 'Katalog sprzetu';

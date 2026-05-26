@@ -147,3 +147,15 @@ main {
     max-width: 200px;
     border-radius: 6px;
 }
+
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+.search-bar input, .search-bar select {
+    padding: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+}
+.search-bar input { flex: 1; }

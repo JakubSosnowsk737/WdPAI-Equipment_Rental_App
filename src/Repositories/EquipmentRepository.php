@@ -19,6 +19,27 @@ final class EquipmentRepository extends AbstractRepository
         return array_map([Equipment::class, 'fromRow'], $rows);
     }
 
+    /** @return Equipment[] */
+    public function search(?string $query, ?int $categoryId): array
+    {
+        $sql = 'SELECT e.*, c.name AS category_name
+                FROM equipment e
+                JOIN categories c ON c.id = e.category_id
+                WHERE 1=1';
+        $params = [];
+        if ($query !== null && $query !== '') {
+            $sql .= ' AND (e.name ILIKE :q OR e.description ILIKE :q)';
+            $params['q'] = '%' . $query . '%';
+        }
+        if ($categoryId !== null && $categoryId > 0) {
+            $sql .= ' AND e.category_id = :cid';
+            $params['cid'] = $categoryId;
+        }
+        $sql .= ' ORDER BY e.name';
+        $rows = $this->fetchAll($sql, $params);
+        return array_map([Equipment::class, 'fromRow'], $rows);
+    }
+
     public function findById(int $id): ?Equipment
     {
         $row = $this->fetchOne(

@@ -19,6 +19,7 @@ $loggedOnly  = [$auth];
 
 $router->get('/',         [HomeController::class, 'index']);
 $router->get('/equipment',           [EquipmentController::class, 'index']);
+$router->get('/api/equipment',       [EquipmentController::class, 'apiSearch']);
 $router->get('/equipment/{id}',      [EquipmentController::class, 'show']);
 $router->get('/register', [AuthController::class, 'showRegister']);
 $router->post('/register',[AuthController::class, 'register']);

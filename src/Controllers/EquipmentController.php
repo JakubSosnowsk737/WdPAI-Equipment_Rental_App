@@ -107,6 +107,23 @@ final class EquipmentController extends AbstractController
         $this->redirect('/admin/equipment');
     }
 
+    public function apiSearch(array $params = []): void
+    {
+        $q   = $this->request->input('q');
+        $cat = $this->request->input('category_id');
+        $items = $this->equipment->search($q, $cat !== null && $cat !== '' ? (int) $cat : null);
+        $out = array_map(static fn($e) => [
+            'id'                 => $e->id,
+            'name'               => $e->name,
+            'description'        => $e->description,
+            'category_name'      => $e->categoryName,
+            'daily_rate'         => $e->dailyRate,
+            'total_quantity'     => $e->totalQuantity,
+            'available_quantity' => $e->availableQuantity,
+        ], $items);
+        $this->json(['items' => $out]);
+    }
+
     public function adminIndex(array $params = []): void
     {
         $this->render('admin/equipment/index', [
