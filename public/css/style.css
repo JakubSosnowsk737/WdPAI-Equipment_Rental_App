@@ -159,3 +159,51 @@ main {
     border-radius: 4px;
 }
 .search-bar input { flex: 1; }
+
+/* Responsywnosc - mobile first podejscie. */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    header nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    header a, header .logo { margin-left: 0; }
+
+    main {
+        margin: 1rem auto;
+        padding: 0.5rem;
+    }
+
+    .form-card {
+        padding: 1rem;
+    }
+
+    .equipment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .data-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .search-bar {
+        flex-direction: column;
+    }
+
+    .gallery img {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body { font-size: 0.95rem; }
+    .btn { width: 100%; }
+}
