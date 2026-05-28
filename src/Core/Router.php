@@ -59,7 +59,6 @@ final class Router
             return;
         }
 
-        http_response_code(404);
-        echo '404 - nie znaleziono';
+        ErrorHandler::renderErrorPage(404);
     }
 }

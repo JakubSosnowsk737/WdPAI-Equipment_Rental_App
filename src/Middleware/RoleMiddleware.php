@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Core\ErrorHandler;
 use App\Core\Request;
-use App\Core\Response;
 use App\Core\Session;
 
 /**
@@ -19,8 +19,7 @@ final class RoleMiddleware
     {
         $role = Session::userRole();
         if ($role === null || !in_array($role, $this->allowed, true)) {
-            http_response_code(403);
-            echo '403 - brak uprawnien';
+            ErrorHandler::renderErrorPage(403);
             exit;
         }
     }
