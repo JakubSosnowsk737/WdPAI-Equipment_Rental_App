@@ -40,8 +40,9 @@ final class EquipmentController extends AbstractController
             return;
         }
         $this->render('equipment/show', [
-            'eq'     => $eq,
-            'images' => $this->images->listForEquipment($id),
+            'eq'      => $eq,
+            'images'  => $this->images->listForEquipment($id),
+            'related' => $this->equipment->findRelated($eq->categoryId, $id, 3),
         ]);
     }
 

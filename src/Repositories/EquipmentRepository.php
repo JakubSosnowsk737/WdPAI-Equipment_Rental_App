@@ -52,6 +52,25 @@ final class EquipmentRepository extends AbstractRepository
         return $row ? Equipment::fromRow($row) : null;
     }
 
+    /**
+     * Podobny sprzet z tej samej kategorii (z pominieciem biezacego).
+     * @return Equipment[]
+     */
+    public function findRelated(int $categoryId, int $excludeId, int $limit = 3): array
+    {
+        // $limit to kontrolowany int z kodu (nie dane uzytkownika) - bezpieczne rzutowanie.
+        $rows = $this->fetchAll(
+            'SELECT e.*, c.name AS category_name
+             FROM equipment e
+             JOIN categories c ON c.id = e.category_id
+             WHERE e.category_id = :cat AND e.id <> :id
+             ORDER BY e.name
+             LIMIT ' . (int) $limit,
+            ['cat' => $categoryId, 'id' => $excludeId]
+        );
+        return array_map([Equipment::class, 'fromRow'], $rows);
+    }
+
     public function create(Equipment $eq): int
     {
         $stmt = $this->pdo->prepare(

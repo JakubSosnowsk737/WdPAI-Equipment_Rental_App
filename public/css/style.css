@@ -468,21 +468,154 @@ textarea { resize: vertical; }
     color: var(--text-muted);
 }
 
-/* ---------- Szczegoly sprzetu ---------- */
-.equipment-detail .back { color: var(--text-muted); text-decoration: none; font-size: .9rem; }
-.equipment-detail .back:hover { color: var(--primary); }
-.equipment-detail .rate { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+/* ---------- Szczegoly sprzetu (karta produktu) ---------- */
+.back { color: var(--text-muted); text-decoration: none; font-size: .9rem; }
+.back:hover { color: var(--primary); }
+[data-theme="dark"] .back:hover { color: var(--accent); }
 
-.gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .75rem;
-    margin: 1.25rem 0;
+.product {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-sm);
 }
-.gallery img {
-    max-width: 240px;
+
+/* panel wizualny */
+.product-media { display: flex; flex-direction: column; gap: .75rem; }
+.product-photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
+}
+.product-thumbs { display: flex; flex-wrap: wrap; gap: .5rem; }
+.product-thumbs img {
+    width: 72px; height: 72px;
+    object-fit: cover;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border);
+}
+.product-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border-strong);
+    background:
+        radial-gradient(120% 120% at 50% 0%, var(--primary-soft) 0%, transparent 60%),
+        var(--surface-2);
+    color: var(--text-muted);
+}
+.product-placeholder svg { width: 64px; height: 64px; color: var(--primary); opacity: .55; }
+[data-theme="dark"] .product-placeholder svg { color: var(--accent); }
+.product-placeholder span { font-size: .85rem; font-weight: 600; letter-spacing: .03em; }
+
+/* panel informacji */
+.product-info { display: flex; flex-direction: column; }
+.product-info h2 { margin: .6rem 0 .5rem; }
+.product-desc { color: var(--text-muted); margin: 0 0 1.25rem; }
+
+/* odznaki */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    align-self: flex-start;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: .32rem .7rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+}
+.badge-cat { background: var(--primary-soft); color: var(--primary); }
+[data-theme="dark"] .badge-cat { color: var(--accent); }
+.badge-ok  { background: var(--success-bg); color: var(--success-fg); border-color: var(--success-bd); }
+.badge-no  { background: var(--error-bg);   color: var(--error-fg);   border-color: var(--error-bd); }
+.badge-ok::before, .badge-no::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor;
+}
+
+/* blok ceny */
+.price-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+}
+.price { font-size: 1.9rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+.price-unit { color: var(--text-muted); font-weight: 600; margin-left: .25rem; }
+
+/* specyfikacja */
+.spec { margin: 0 0 1.5rem; display: grid; gap: 0; }
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-row dt { color: var(--text-muted); font-size: .92rem; }
+.spec-row dd { margin: 0; font-weight: 600; }
+
+.product-actions { margin-top: auto; }
+.product-actions .btn { width: 100%; margin-top: 0; }
+
+/* ---------- Sekcja: jak wypozyczyc ---------- */
+.info-steps { margin-top: 2.5rem; }
+.info-steps h3, .related h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.step {
+    display: flex;
+    gap: .9rem;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+.step-num {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+}
+.step strong { display: block; margin-bottom: .2rem; }
+.step p { margin: 0; color: var(--text-muted); font-size: .9rem; }
+
+/* ---------- Sekcja: podobny sprzet ---------- */
+.related { margin-top: 2.5rem; }
+
+/* galeria (uzywana m.in. w panelu admina) */
+.gallery { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.25rem 0; }
+.gallery img { max-width: 240px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+
+@media (max-width: 768px) {
+    .product { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.25rem; }
 }
 
 /* ---------- Pasek wyszukiwania ---------- */
