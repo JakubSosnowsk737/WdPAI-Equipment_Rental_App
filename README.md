@@ -121,16 +121,65 @@ a nie aktualnej ceny, wiec nie jest redundancja).
   ```bash
   vendor/bin/phpunit
   ```
-  Pokrywaja `User` (model) i `AuthService` (mock UserRepository).
+  Pokrywaja `User` (model), `AuthService` (mock UserRepository),
+  `LoginThrottle` (mock LoginAttemptRepository) oraz `Csrf`.
 - **Integracyjne** (curl):
   ```bash
   bash tests/integration/smoke.sh
   ```
+  Sprawdza m.in. odrzucenie POST `/login` bez tokenu CSRF (403).
+
+## Bezpieczenstwo (Security Bingo)
+
+Aplikacja realizuje 24 z 25 punktow "Security Bingo". Jedyny celowo
+**niezaimplementowany** punkt to **E1 (wymuszenie HTTPS)** - aplikacja jest
+uruchamiana lokalnie po HTTP, a wsparcie dla flagi `Secure` na cookie jest
+przygotowane i wlaczane zmienna `SESSION_SECURE=true` w srodowisku z HTTPS.
+
+| #  | Zabezpieczenie | Status | Gdzie w kodzie |
+|----|----------------|--------|----------------|
+| A1 | Ochrona przed SQL injection (prepared statements) | ✅ | wszystkie repozytoria (PDO `prepare`/bind) |
+| B1 | Nie zdradzam, czy email istnieje | ✅ | `AuthController::login` ("Email lub haslo jest niepoprawne") |
+| C1 | Walidacja formatu email po stronie serwera | ✅ | `AuthService::validate` (`filter_var`) |
+| D1 | UserRepository jako singleton | ✅ | `UserRepository::getInstance` |
+| E1 | Logowanie/rejestracja tylko przez HTTPS | ⬜ | celowo pominiete; przygotowane `SESSION_SECURE` |
+| A2 | Login/register tylko POST, GET renderuje | ✅ | `Router` (405 dla zlej metody) + osobne trasy GET/POST |
+| B2 | CSRF token w formularzu logowania | ✅ | `Csrf::field` + `CsrfMiddleware` |
+| C2 | CSRF token w formularzu rejestracji | ✅ | `Csrf::field` + `CsrfMiddleware` |
+| D2 | Ograniczenie dlugosci wejscia | ✅ | `AuthService::validate` (limity) + `maxlength` w formularzach |
+| E2 | Hasla jako hash (bcrypt) | ✅ | `AuthService::register` (`password_hash`) |
+| A3 | Hasla nigdy nie trafiaja do logow | ✅ | `LoginThrottle` loguje tylko email+IP; `ErrorHandler` nie zrzuca POST |
+| B3 | Regeneracja ID sesji po logowaniu | ✅ | `Session::login` (`session_regenerate_id(true)`) |
+| C3 | Cookie sesyjne HttpOnly | ✅ | `Session::start` (`cookie_httponly`) |
+| D3 | Cookie sesyjne Secure | ✅ | `Session::start` (`cookie_secure` z `SESSION_SECURE`) |
+| E3 | Cookie SameSite | ✅ | `Session::start` (`cookie_samesite = Lax`) |
+| A4 | Limit prob logowania / blokada czasowa | ✅ | `LoginThrottle` + tabela `login_attempts` |
+| B4 | Walidacja zlozonosci hasla | ✅ | `AuthService::validate` (min 8, litera+cyfra) |
+| C4 | Sprawdzenie, czy email juz istnieje | ✅ | `AuthService::register` (`findByEmail`) |
+| D4 | Escaping danych w widokach (XSS) | ✅ | `htmlspecialchars(..., ENT_QUOTES)` we wszystkich widokach |
+| E4 | Brak stack trace w produkcji | ✅ | `ErrorHandler` (tryb `APP_DEBUG`) |
+| A5 | Sensowne kody HTTP (400/401/403/405/429) | ✅ | kontrolery + `Router` + `ErrorHandler` |
+| B5 | Haslo nie trafia do widokow | ✅ | kontrolery nie przekazuja hasla do `render` |
+| C5 | Z bazy pobieram tylko minimalny zestaw danych | ✅ | `UserRepository::COLUMNS` (jawna lista kolumn) |
+| D5 | Poprawne wylogowanie - niszczenie sesji | ✅ | `Session::logout` (czyszczenie + usuniecie cookie) |
+| E5 | Audyt nieudanych prob logowania (bez hasel) | ✅ | `LoginThrottle::registerFailure` + `login_attempts` |
+
+### Scenariusz testowy bezpieczenstwa
+
+1. **CSRF**: usun pole `csrf_token` z formularza logowania (DevTools) i wyslij ->
+   odpowiedz **403**.
+2. **Brute-force**: 5x bledne haslo dla tego samego emaila -> kolejna proba
+   blokowana komunikatem i kodem **429**.
+3. **Enumeracja**: zaloguj sie z nieistniejacym emailem -> komunikat identyczny
+   jak przy zlym hasle.
+4. **XSS**: zarejestruj uzytkownika z imieniem `<script>alert(1)</script>` ->
+   w widokach wyswietla sie jako tekst, skrypt sie nie wykonuje.
+5. **Audyt**: po nieudanych probach sprawdz `SELECT * FROM login_attempts;`.
 
 ## Checklista wymagan
 
 - [x] Docker + docker-compose (PHP + Postgres + nginx)
-- [x] GIT z historia rozwoju (50 commitow)
+- [x] GIT z historia rozwoju (60 commitow)
 - [x] HTML5, CSS, JavaScript (FETCH API)
 - [x] PHP obiektowy, bez frameworka
 - [x] PostgreSQL
@@ -150,27 +199,30 @@ a nie aktualnej ceny, wiec nie jest redundancja).
 - [x] README z opisem, ERD, screenami, instrukcja, scenariuszem
 - [x] PHPUnit (2 zestawy testow)
 - [x] Bashowy smoke test endpointow
-- [x] Strony bledow 400/403/404/500
+- [x] Strony bledow 400/403/404/405/500
 - [x] SOLID + brak duplikacji kodu
+- [x] Security Bingo: 24/25 punktow (CSRF, throttling, audyt, XSS, sesje, ...)
 
 ## Struktura katalogow
 
 ```
 .
-├── database/        # schema.sql, views.sql, triggers.sql, functions.sql, seed.sql
+├── database/        # schema.sql, views.sql, triggers.sql, functions.sql,
+│   │                # seed.sql, migrations/ (login_attempts)
 ├── docker/          # Dockerfile PHP, konfiguracja nginx
 ├── docs/            # ERD, screeny, diagram architektury
 ├── public/          # front controller, CSS, JS, uploads
 ├── src/
 │   ├── Controllers/ # AbstractController + Home/Auth/User/Equipment/Rental
 │   ├── Core/        # Autoloader, Config, Database, Router, Request, Response,
-│   │                # View, Session, ErrorHandler
-│   ├── Middleware/  # AuthMiddleware, RoleMiddleware
+│   │                # View, Session, Csrf, ErrorHandler
+│   ├── Middleware/  # AuthMiddleware, RoleMiddleware, CsrfMiddleware
 │   ├── Models/      # User, Category, Equipment, Rental
-│   ├── Repositories/# AbstractRepository + UserRepo, EquipmentRepo, ...
-│   └── Services/    # AuthService, RentalService
+│   ├── Repositories/# AbstractRepository + UserRepo, EquipmentRepo,
+│   │                # LoginAttemptRepo, ...
+│   └── Services/    # AuthService, RentalService, LoginThrottle
 ├── tests/
-│   ├── Unit/        # UserModelTest, AuthServiceTest
+│   ├── Unit/        # UserModelTest, AuthServiceTest, LoginThrottleTest, CsrfTest
 │   └── integration/ # smoke.sh
 ├── views/           # layout.php + szablony PHP
 ├── docker-compose.yml
