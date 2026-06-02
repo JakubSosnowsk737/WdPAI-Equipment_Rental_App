@@ -233,6 +233,8 @@ przygotowane i wlaczane zmienna `SESSION_SECURE=true` w srodowisku z HTTPS.
 
 ## Diagram warstw
 
+Diagram graficzny: [`docs/architecture.svg`](docs/architecture.svg). Wersja tekstowa:
+
 ```
 +--------------------+
 |  Widoki (PHP/HTML) |  <- prezentacja

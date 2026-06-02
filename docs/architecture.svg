@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="720" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+  <style>
+    .title  { fill: #1f3a5f; font-weight: bold; font-size: 20px; }
+    .layer  { fill: #ffffff; stroke: #1f3a5f; stroke-width: 1.5; }
+    .lname  { fill: #1f3a5f; font-weight: bold; font-size: 15px; }
+    .ldesc  { fill: #475569; font-size: 12px; }
+    .infra  { fill: #eef2ff; stroke: #6366f1; stroke-width: 1.5; }
+    .iname  { fill: #3730a3; font-weight: bold; }
+    .arrow  { stroke: #475569; stroke-width: 2; marker-end: url(#a); }
+    .note   { fill: #475569; font-size: 11px; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="34" class="title">WypozyczalniaPRO - architektura warstwowa</text>
+
+  <!-- Browser / nginx infra -->
+  <rect class="infra" x="260" y="56" width="300" height="46" rx="6"/>
+  <text class="iname" x="410" y="76" text-anchor="middle">Przegladarka (HTML/CSS/JS + FETCH API)</text>
+  <text class="note"  x="410" y="93" text-anchor="middle">zadania HTTP -> nginx -> PHP-FPM</text>
+
+  <line class="arrow" x1="410" y1="102" x2="410" y2="128"/>
+
+  <!-- Front controller -->
+  <rect class="infra" x="260" y="130" width="300" height="40" rx="6"/>
+  <text class="iname" x="410" y="155" text-anchor="middle">public/index.php  (Front Controller)</text>
+
+  <line class="arrow" x1="410" y1="170" x2="410" y2="196"/>
+
+  <!-- Warstwa 1: Router + Middleware -->
+  <rect class="layer" x="120" y="198" width="580" height="58" rx="6"/>
+  <text class="lname" x="140" y="222">Router + Middleware</text>
+  <text class="ldesc" x="140" y="244">CSRF, Auth, Role, kontrola metody (405) - bezpieczenstwo zanim trafi do kontrolera</text>
+
+  <line class="arrow" x1="410" y1="256" x2="410" y2="282"/>
+
+  <!-- Warstwa 2: Controllers -->
+  <rect class="layer" x="120" y="284" width="580" height="58" rx="6"/>
+  <text class="lname" x="140" y="308">Kontrolery (Controllers)</text>
+  <text class="ldesc" x="140" y="330">Home / Auth / User / Equipment / Rental - cienkie, deleguja do warstwy uslug</text>
+
+  <line class="arrow" x1="410" y1="342" x2="410" y2="368"/>
+
+  <!-- Warstwa 3: Services -->
+  <rect class="layer" x="120" y="370" width="580" height="58" rx="6"/>
+  <text class="lname" x="140" y="394">Uslugi (Services)</text>
+  <text class="ldesc" x="140" y="416">AuthService, RentalService (transakcje), LoginThrottle - logika biznesowa</text>
+
+  <line class="arrow" x1="410" y1="428" x2="410" y2="454"/>
+
+  <!-- Warstwa 4: Repositories -->
+  <rect class="layer" x="120" y="456" width="580" height="58" rx="6"/>
+  <text class="lname" x="140" y="480">Repozytoria (Repositories)</text>
+  <text class="ldesc" x="140" y="502">AbstractRepository + User/Equipment/Rental/LoginAttempt - SQL przez PDO</text>
+
+  <line class="arrow" x1="410" y1="514" x2="410" y2="540"/>
+
+  <!-- Warstwa 5: PostgreSQL -->
+  <rect class="infra" x="120" y="542" width="580" height="74" rx="6"/>
+  <text class="iname" x="410" y="566" text-anchor="middle">PostgreSQL</text>
+  <text class="note"  x="410" y="586" text-anchor="middle">tabele (3NF) + widoki + trigger + funkcja PL/pgSQL</text>
+  <text class="note"  x="410" y="604" text-anchor="middle">transakcje SERIALIZABLE przy wypozyczaniu</text>
+
+  <!-- Widoki (View) z boku -->
+  <rect class="layer" x="120" y="640" width="580" height="52" rx="6"/>
+  <text class="lname" x="140" y="662">Widoki (View)</text>
+  <text class="ldesc" x="140" y="682">szablony PHP renderowane przez kontroler; escaping htmlspecialchars (ochrona XSS)</text>
+
+  <line class="arrow" x1="410" y1="640" x2="410" y2="624"/>
+
+  <!-- Docker note -->
+  <text class="note" x="40" y="712">Calosc uruchamiana w Dockerze: kontenery nginx + PHP-FPM + PostgreSQL (docker-compose).</text>
+</svg>
