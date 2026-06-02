@@ -15,9 +15,13 @@ final class Session
         if (session_status() !== PHP_SESSION_ACTIVE) {
             $name = Config::get('SESSION_NAME', 'wpro_sid');
             session_name($name);
+            // Flaga Secure z konfiguracji - na produkcji (HTTPS) ustaw SESSION_SECURE=true,
+            // wtedy cookie sesyjne nie zostanie wyslane przez czyste HTTP.
+            $secure = Config::get('SESSION_SECURE', 'false') === 'true';
             session_start([
-                'cookie_httponly' => true,
-                'cookie_samesite' => 'Lax',
+                'cookie_httponly' => true,   // JS nie ma dostepu do cookie (ochrona XSS)
+                'cookie_samesite' => 'Lax',  // ogranicza wysylanie cookie cross-site (CSRF)
+                'cookie_secure'   => $secure,
             ]);
         }
     }
@@ -35,6 +39,22 @@ final class Session
     {
         self::start();
         $_SESSION = [];
+        // Usuwamy cookie sesyjne po stronie przegladarki.
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                [
+                    'expires'  => time() - 42000,
+                    'path'     => $params['path'],
+                    'domain'   => $params['domain'],
+                    'secure'   => $params['secure'],
+                    'httponly' => $params['httponly'],
+                    'samesite' => $params['samesite'] ?? 'Lax',
+                ]
+            );
+        }
         session_destroy();
     }
 
