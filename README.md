@@ -97,6 +97,8 @@ a nie aktualnej ceny, wiec nie jest redundancja).
 - Strony bledow 400/403/404/500 obslugiwane globalnie (`ErrorHandler`)
 - Minimalistyczny design (biel + ciemna zielen) z trybem jasnym/ciemnym
   (przelacznik w naglowku, zapamietywanie w `localStorage`, `prefers-color-scheme`)
+- Interaktywny kalendarz wyboru zakresu dat przy wypozyczaniu (vanilla JS,
+  blokada dat przeszlych, podglad liczby dni i szacowanego kosztu na zywo)
 
 ## Scenariusz testowy
 
@@ -275,6 +277,7 @@ naglowku, zapamietywany w `localStorage`, respektuje `prefers-color-scheme`).
 | ![Strona glowna jasna](docs/screenshots/home.png) | ![Strona glowna ciemna](docs/screenshots/home-dark.png) |
 | ![Panel admina jasny](docs/screenshots/admin-equipment.png) | ![Panel admina ciemny](docs/screenshots/admin-equipment-dark.png) |
 | ![Szczegoly sprzetu jasny](docs/screenshots/equipment-detail.png) | ![Szczegoly sprzetu ciemny](docs/screenshots/equipment-detail-dark.png) |
+| ![Kalendarz wypozyczenia jasny](docs/screenshots/rental-calendar.png) | ![Kalendarz wypozyczenia ciemny](docs/screenshots/rental-calendar-dark.png) |
 
 Dodatkowo: `login.png`, `admin-users.png`, `admin-rentals.png`.
 
