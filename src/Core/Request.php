@@ -27,4 +27,9 @@ final class Request
     {
         return array_merge($_GET, $_POST);
     }
+
+    public function ip(): string
+    {
+        return (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+    }
 }

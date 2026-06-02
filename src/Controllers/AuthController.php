@@ -4,17 +4,21 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Session;
+use App\Repositories\LoginAttemptRepository;
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
+use App\Services\LoginThrottle;
 
 final class AuthController extends AbstractController
 {
     private AuthService $auth;
+    private LoginThrottle $throttle;
 
     public function __construct()
     {
         parent::__construct();
-        $this->auth = new AuthService(UserRepository::getInstance());
+        $this->auth     = new AuthService(UserRepository::getInstance());
+        $this->throttle = new LoginThrottle(new LoginAttemptRepository());
     }
 
     public function showRegister(array $params = []): void
@@ -42,12 +46,26 @@ final class AuthController extends AbstractController
     {
         $email    = (string) $this->request->input('email', '');
         $password = (string) $this->request->input('password', '');
+        $ip       = $this->request->ip();
+
+        // Limit prob logowania (brute-force). Generyczny komunikat - nie zdradza
+        // czy to blokada czy bledne haslo wobec konkretnego konta.
+        if ($this->throttle->isLocked($email, $ip)) {
+            $this->render('auth/login', [
+                'error' => 'Zbyt wiele prob logowania. Sprobuj ponownie za kilka minut.',
+            ], 429);
+            return;
+        }
 
         $user = $this->auth->verify($email, $password);
         if ($user === null) {
-            $this->render('auth/login', ['error' => 'Bledne dane logowania.'], 401);
+            $this->throttle->registerFailure($email, $ip);
+            // Generyczny komunikat - nie zdradzamy, czy email istnieje.
+            $this->render('auth/login', ['error' => 'Email lub haslo jest niepoprawne.'], 401);
             return;
         }
+
+        $this->throttle->registerSuccess($email, $ip);
         Session::login($user);
         $this->redirect('/');
     }
