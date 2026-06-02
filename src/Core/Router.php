@@ -14,6 +14,14 @@ final class Router
     /** @var array<int, array{method:string, pattern:string, handler:array{0:string,1:string}, middleware: array<int,callable>}> */
     private array $routes = [];
 
+    /** @var array<int, callable> middleware uruchamiany dla kazdej trasy przed middleware trasy */
+    private array $globalMiddleware = [];
+
+    public function addGlobalMiddleware(callable $middleware): void
+    {
+        $this->globalMiddleware[] = $middleware;
+    }
+
     public function add(string $method, string $path, array $handler, array $middleware = []): void
     {
         $pattern = '#^' . preg_replace('#\{(\w+)\}#', '(?P<$1>[^/]+)', $path) . '$#';
@@ -46,6 +54,9 @@ final class Router
             }
             $params = array_filter($m, 'is_string', ARRAY_FILTER_USE_KEY);
 
+            foreach ($this->globalMiddleware as $mw) {
+                $mw($request);
+            }
             foreach ($route['middleware'] as $mw) {
                 $mw($request);
             }

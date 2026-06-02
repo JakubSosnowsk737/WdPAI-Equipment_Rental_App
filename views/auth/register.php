@@ -9,10 +9,11 @@
         </ul>
     <?php endif; ?>
     <form method="post" action="/register">
-        <label>Imie<input type="text" name="first_name" required></label>
-        <label>Nazwisko<input type="text" name="last_name" required></label>
-        <label>Email<input type="email" name="email" required></label>
-        <label>Haslo<input type="password" name="password" required minlength="6"></label>
+        <?= App\Core\Csrf::field() ?>
+        <label>Imie<input type="text" name="first_name" required maxlength="80"></label>
+        <label>Nazwisko<input type="text" name="last_name" required maxlength="80"></label>
+        <label>Email<input type="email" name="email" required maxlength="150"></label>
+        <label>Haslo<input type="password" name="password" required minlength="8" maxlength="200"></label>
         <button type="submit" class="btn">Zarejestruj</button>
     </form>
 </section>

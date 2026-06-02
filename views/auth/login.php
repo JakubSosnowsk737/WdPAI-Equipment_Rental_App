@@ -5,7 +5,8 @@
         <p class="error"><?= htmlspecialchars($error, ENT_QUOTES) ?></p>
     <?php endif; ?>
     <form method="post" action="/login">
-        <label>Email<input type="email" name="email" required></label>
+        <?= App\Core\Csrf::field() ?>
+        <label>Email<input type="email" name="email" required maxlength="150"></label>
         <label>Haslo<input type="password" name="password" required></label>
         <button type="submit" class="btn">Zaloguj</button>
     </form>
