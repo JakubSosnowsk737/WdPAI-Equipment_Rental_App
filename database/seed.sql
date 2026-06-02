@@ -1,14 +1,15 @@
 -- Dane przykladowe - WypozyczalniaPRO
--- Hasla bcrypt do testow:
+-- Hasla bcrypt do testow (password_hash, PASSWORD_BCRYPT):
 --   admin@wpro.pl     / admin123
 --   pracownik@wpro.pl / pracownik123
 --   klient@wpro.pl    / klient123
+--   klient2@wpro.pl   / klient123
 
 INSERT INTO users (email, password_hash, first_name, last_name, role) VALUES
-('admin@wpro.pl',     '$2y$10$wW5pV2c8e9q0vKQ4Yp9c5e7nL.7tBQz3OrrFcgWf7uZ0pYj7oQ3jq', 'Anna',  'Adminska',  'admin'),
-('pracownik@wpro.pl', '$2y$10$wW5pV2c8e9q0vKQ4Yp9c5e7nL.7tBQz3OrrFcgWf7uZ0pYj7oQ3jq', 'Piotr', 'Pracowski', 'pracownik'),
-('klient@wpro.pl',    '$2y$10$wW5pV2c8e9q0vKQ4Yp9c5e7nL.7tBQz3OrrFcgWf7uZ0pYj7oQ3jq', 'Jan',   'Klientowicz','klient'),
-('klient2@wpro.pl',   '$2y$10$wW5pV2c8e9q0vKQ4Yp9c5e7nL.7tBQz3OrrFcgWf7uZ0pYj7oQ3jq', 'Ewa',   'Wypozyczak','klient');
+('admin@wpro.pl',     '$2y$10$zxt6zTiYXnk3jSGbX9G78ewBttwtrZn4jlUQyPtQd0oNrbCzAUV.2', 'Anna',  'Adminska',  'admin'),
+('pracownik@wpro.pl', '$2y$10$9HeP83.LE0aBGVL6XFjDSuXtTMXtrTbt.cCx93ESCkm3Sd9K5OsqO', 'Piotr', 'Pracowski', 'pracownik'),
+('klient@wpro.pl',    '$2y$10$mhbC/uhuCo4oMfVm1OtC2uPjMaIp9gxYuLZfXpLoFhg2gBWEyXB6u', 'Jan',   'Klientowicz','klient'),
+('klient2@wpro.pl',   '$2y$10$mhbC/uhuCo4oMfVm1OtC2uPjMaIp9gxYuLZfXpLoFhg2gBWEyXB6u', 'Ewa',   'Wypozyczak','klient');
 
 INSERT INTO user_profiles (user_id, phone, address) VALUES
 (1, '+48 600 000 001', 'ul. Glowna 1, Krakow'),
