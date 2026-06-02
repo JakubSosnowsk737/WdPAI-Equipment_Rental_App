@@ -5,7 +5,7 @@ ob_start();
 ?>
 <section class="form-card">
     <h2>Wypozyczenie: <?= htmlspecialchars($eq->name, ENT_QUOTES) ?></h2>
-    <p>Stawka: <?= number_format($eq->dailyRate, 2) ?> zl / dzien</p>
+    <p>Stawka: <strong><?= number_format($eq->dailyRate, 2) ?> zl</strong> / dzien</p>
     <?php if (!empty($errors)): ?>
         <ul class="errors">
             <?php foreach ($errors as $e): ?>
@@ -13,21 +13,35 @@ ob_start();
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
-    <form method="post" action="/rentals">
+    <form method="post" action="/rentals" id="rental-form">
         <?= App\Core\Csrf::field() ?>
         <input type="hidden" name="equipment_id" value="<?= (int) $eq->id ?>">
         <label>Ilosc
-            <input type="number" name="quantity" min="1" max="<?= $eq->availableQuantity ?>" value="1" required>
+            <input type="number" name="quantity" id="quantity"
+                   min="1" max="<?= $eq->availableQuantity ?>" value="1" required>
         </label>
-        <label>Data od
-            <input type="date" name="start_date" required>
-        </label>
-        <label>Data do
-            <input type="date" name="end_date" required>
-        </label>
-        <button type="submit" class="btn">Wypozycz</button>
+
+        <label>Termin wypozyczenia</label>
+
+        <?php /* Kalendarz (JS) - pisze wartosci do natywnych pol ponizej. */ ?>
+        <div id="rental-calendar" class="calendar"
+             data-rate="<?= htmlspecialchars((string) $eq->dailyRate, ENT_QUOTES) ?>"></div>
+
+        <?php /* Natywne pola dat = jedyne pola formularza (fallback bez JS).
+                  Kalendarz wpisuje do nich wartosci i ukrywa ten kontener. */ ?>
+        <div class="native-dates" id="native-dates">
+            <label>Data od
+                <input type="date" name="start_date" id="start_date" required>
+            </label>
+            <label>Data do
+                <input type="date" name="end_date" id="end_date" required>
+            </label>
+        </div>
+
+        <button type="submit" class="btn" id="rental-submit">Wypozycz</button>
     </form>
 </section>
+<script src="/js/calendar.js" defer></script>
 <?php
 $content = ob_get_clean();
 $title = 'Nowe wypozyczenie';
