@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="860" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+  <style>
+    .entity   { fill: #ffffff; stroke: #1f3a5f; stroke-width: 1.5; }
+    .header   { fill: #1f3a5f; }
+    .htext    { fill: #ffffff; font-weight: bold; font-size: 13px; }
+    .col      { fill: #1f2937; }
+    .pk       { fill: #b45309; font-weight: bold; }
+    .fk       { fill: #2563eb; }
+    .rel      { stroke: #475569; stroke-width: 1.5; fill: none; }
+    .rellbl   { fill: #475569; font-weight: bold; font-size: 12px; }
+    .title    { fill: #1f3a5f; font-weight: bold; font-size: 20px; }
+    .legend   { fill: #475569; font-size: 11px; }
+  </style>
+
+  <text x="40" y="30" class="title">WypozyczalniaPRO - Diagram ERD</text>
+  <text x="40" y="48" class="legend">PK = klucz glowny (pomaranczowy), FK = klucz obcy (niebieski). Relacje opisane krotnoscia 1 / N / M.</text>
+
+  <!-- ============ users ============ -->
+  <g>
+    <rect class="entity" x="40" y="70" width="240" height="158" rx="4"/>
+    <rect class="header" x="40" y="70" width="240" height="26" rx="4"/>
+    <text class="htext" x="52" y="88">users</text>
+    <text class="pk"  x="52" y="114">id  (PK)</text>
+    <text class="col" x="52" y="132">email  (UNIQUE)</text>
+    <text class="col" x="52" y="150">password_hash</text>
+    <text class="col" x="52" y="168">first_name</text>
+    <text class="col" x="52" y="186">last_name</text>
+    <text class="col" x="52" y="204">role</text>
+    <text class="col" x="52" y="222">created_at</text>
+  </g>
+
+  <!-- ============ user_profiles ============ -->
+  <g>
+    <rect class="entity" x="40" y="320" width="240" height="86" rx="4"/>
+    <rect class="header" x="40" y="320" width="240" height="26" rx="4"/>
+    <text class="htext" x="52" y="338">user_profiles</text>
+    <text class="pk"  x="52" y="364">user_id  (PK, FK)</text>
+    <text class="col" x="52" y="382">phone</text>
+    <text class="col" x="52" y="400">address</text>
+  </g>
+
+  <!-- ============ rentals ============ -->
+  <g>
+    <rect class="entity" x="40" y="500" width="240" height="158" rx="4"/>
+    <rect class="header" x="40" y="500" width="240" height="26" rx="4"/>
+    <text class="htext" x="52" y="518">rentals</text>
+    <text class="pk"  x="52" y="544">id  (PK)</text>
+    <text class="fk"  x="52" y="562">user_id  (FK)</text>
+    <text class="col" x="52" y="580">status</text>
+    <text class="col" x="52" y="598">start_date</text>
+    <text class="col" x="52" y="616">end_date</text>
+    <text class="col" x="52" y="634">total_cost</text>
+    <text class="col" x="52" y="652">created_at</text>
+  </g>
+
+  <!-- ============ rental_items (junction M:N) ============ -->
+  <g>
+    <rect class="entity" x="460" y="520" width="240" height="104" rx="4"/>
+    <rect class="header" x="460" y="520" width="240" height="26" rx="4"/>
+    <text class="htext" x="472" y="538">rental_items</text>
+    <text class="pk"  x="472" y="564">rental_id  (PK, FK)</text>
+    <text class="pk"  x="472" y="582">equipment_id  (PK, FK)</text>
+    <text class="col" x="472" y="600">quantity</text>
+    <text class="col" x="472" y="618">daily_rate</text>
+  </g>
+
+  <!-- ============ categories ============ -->
+  <g>
+    <rect class="entity" x="900" y="70" width="240" height="86" rx="4"/>
+    <rect class="header" x="900" y="70" width="240" height="26" rx="4"/>
+    <text class="htext" x="912" y="88">categories</text>
+    <text class="pk"  x="912" y="114">id  (PK)</text>
+    <text class="col" x="912" y="132">name  (UNIQUE)</text>
+    <text class="col" x="912" y="150">description</text>
+  </g>
+
+  <!-- ============ equipment ============ -->
+  <g>
+    <rect class="entity" x="900" y="300" width="240" height="176" rx="4"/>
+    <rect class="header" x="900" y="300" width="240" height="26" rx="4"/>
+    <text class="htext" x="912" y="318">equipment</text>
+    <text class="pk"  x="912" y="344">id  (PK)</text>
+    <text class="fk"  x="912" y="362">category_id  (FK)</text>
+    <text class="col" x="912" y="380">name</text>
+    <text class="col" x="912" y="398">description</text>
+    <text class="col" x="912" y="416">daily_rate</text>
+    <text class="col" x="912" y="434">total_quantity</text>
+    <text class="col" x="912" y="452">available_quantity</text>
+    <text class="col" x="912" y="470">created_at</text>
+  </g>
+
+  <!-- ============ equipment_images ============ -->
+  <g>
+    <rect class="entity" x="900" y="560" width="240" height="86" rx="4"/>
+    <rect class="header" x="900" y="560" width="240" height="26" rx="4"/>
+    <text class="htext" x="912" y="578">equipment_images</text>
+    <text class="pk"  x="912" y="604">id  (PK)</text>
+    <text class="fk"  x="912" y="622">equipment_id  (FK)</text>
+    <text class="col" x="912" y="640">image_path</text>
+  </g>
+
+  <!-- ============ login_attempts (audyt, brak FK) ============ -->
+  <g>
+    <rect class="entity" x="460" y="70" width="240" height="122" rx="4"/>
+    <rect class="header" x="460" y="70" width="240" height="26" rx="4"/>
+    <text class="htext" x="472" y="88">login_attempts</text>
+    <text class="pk"  x="472" y="114">id  (PK)</text>
+    <text class="col" x="472" y="132">email</text>
+    <text class="col" x="472" y="150">ip_address</text>
+    <text class="col" x="472" y="168">successful</text>
+    <text class="col" x="472" y="186">created_at</text>
+  </g>
+
+  <!-- ============ Relacje ============ -->
+  <!-- users 1:1 user_profiles -->
+  <path class="rel" d="M160,228 L160,320"/>
+  <text class="rellbl" x="166" y="262">1</text>
+  <text class="rellbl" x="166" y="312">1</text>
+
+  <!-- users 1:N rentals -->
+  <path class="rel" d="M120,228 L120,500"/>
+  <text class="rellbl" x="100" y="262">1</text>
+  <text class="rellbl" x="100" y="494">N</text>
+
+  <!-- rentals 1:N rental_items -->
+  <path class="rel" d="M280,580 L460,575"/>
+  <text class="rellbl" x="292" y="572">1</text>
+  <text class="rellbl" x="436" y="568">N</text>
+
+  <!-- equipment 1:N rental_items -->
+  <path class="rel" d="M900,420 C780,460 720,520 700,560"/>
+  <text class="rellbl" x="868" y="438">1</text>
+  <text class="rellbl" x="706" y="556">N</text>
+
+  <!-- categories 1:N equipment -->
+  <path class="rel" d="M1020,156 L1020,300"/>
+  <text class="rellbl" x="1026" y="190">1</text>
+  <text class="rellbl" x="1026" y="294">N</text>
+
+  <!-- equipment 1:N equipment_images -->
+  <path class="rel" d="M1020,476 L1020,560"/>
+  <text class="rellbl" x="1026" y="508">1</text>
+  <text class="rellbl" x="1026" y="554">N</text>
+
+  <!-- Adnotacja M:N -->
+  <text class="legend" x="300" y="660">rentals  &lt;--- M:N ---&gt;  equipment  (tabela laczaca: rental_items)</text>
+  <text class="legend" x="460" y="210">login_attempts: audyt logowania, bez kluczy obcych</text>
+</svg>

@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="ERD WypozyczalniaPRO" id="erd-wpro">
+    <mxGraphModel dx="1200" dy="860" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1180" pageHeight="860" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- users -->
+        <mxCell id="users" value="users&#10;----------------&#10;id (PK)&#10;email UNIQUE&#10;password_hash&#10;first_name&#10;last_name&#10;role&#10;created_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#1f3a5f;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="240" height="158" as="geometry" />
+        </mxCell>
+
+        <!-- user_profiles -->
+        <mxCell id="profiles" value="user_profiles&#10;----------------&#10;user_id (PK, FK)&#10;phone&#10;address" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#1f3a5f;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- rentals -->
+        <mxCell id="rentals" value="rentals&#10;----------------&#10;id (PK)&#10;user_id (FK)&#10;status&#10;start_date&#10;end_date&#10;total_cost&#10;created_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#1f3a5f;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="240" height="158" as="geometry" />
+        </mxCell>
+
+        <!-- rental_items -->
+        <mxCell id="items" value="rental_items&#10;----------------&#10;rental_id (PK, FK)&#10;equipment_id (PK, FK)&#10;quantity&#10;daily_rate" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#fff7ed;strokeColor=#b45309;" vertex="1" parent="1">
+          <mxGeometry x="460" y="520" width="240" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- categories -->
+        <mxCell id="categories" value="categories&#10;----------------&#10;id (PK)&#10;name UNIQUE&#10;description" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#1f3a5f;" vertex="1" parent="1">
+          <mxGeometry x="900" y="70" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- equipment -->
+        <mxCell id="equipment" value="equipment&#10;----------------&#10;id (PK)&#10;category_id (FK)&#10;name&#10;description&#10;daily_rate&#10;total_quantity&#10;available_quantity&#10;created_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#1f3a5f;" vertex="1" parent="1">
+          <mxGeometry x="900" y="300" width="240" height="176" as="geometry" />
+        </mxCell>
+
+        <!-- equipment_images -->
+        <mxCell id="images" value="equipment_images&#10;----------------&#10;id (PK)&#10;equipment_id (FK)&#10;image_path" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#1f3a5f;" vertex="1" parent="1">
+          <mxGeometry x="900" y="560" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- login_attempts -->
+        <mxCell id="attempts" value="login_attempts&#10;----------------&#10;id (PK)&#10;email&#10;ip_address&#10;successful&#10;created_at" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fillColor=#ffffff;strokeColor=#64748b;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="70" width="240" height="122" as="geometry" />
+        </mxCell>
+
+        <!-- relacje -->
+        <mxCell id="r1" value="1 : 1" style="endArrow=none;html=1;startArrow=none;" edge="1" parent="1" source="users" target="profiles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="1 : N" style="endArrow=none;html=1;startArrow=none;" edge="1" parent="1" source="users" target="rentals">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="1 : N" style="endArrow=none;html=1;startArrow=none;" edge="1" parent="1" source="rentals" target="items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" value="1 : N" style="endArrow=none;html=1;startArrow=none;" edge="1" parent="1" source="equipment" target="items">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" value="1 : N" style="endArrow=none;html=1;startArrow=none;" edge="1" parent="1" source="categories" target="equipment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" value="1 : N" style="endArrow=none;html=1;startArrow=none;" edge="1" parent="1" source="equipment" target="images">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

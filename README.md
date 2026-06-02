@@ -68,7 +68,8 @@ psql -U app -d wypozyczalnia -f database/install.sql
 | `rentals`         | 1:N z `users`                 |
 | `rental_items`    | M:N (`rentals` <-> `equipment`) z atrybutami `quantity`, `daily_rate` |
 
-ERD: `docs/erd.png` (zrodlo edytowalne: `docs/erd.drawio`).
+ERD: [`docs/erd.svg`](docs/erd.svg) (zrodlo edytowalne: [`docs/erd.drawio`](docs/erd.drawio),
+opis tekstowy: [`docs/erd.md`](docs/erd.md)).
 
 ### Widoki, trigger, funkcja
 
