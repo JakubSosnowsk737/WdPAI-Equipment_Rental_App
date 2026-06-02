@@ -14,7 +14,7 @@ final class AuthController extends AbstractController
     public function __construct()
     {
         parent::__construct();
-        $this->auth = new AuthService(new UserRepository());
+        $this->auth = new AuthService(UserRepository::getInstance());
     }
 
     public function showRegister(array $params = []): void

@@ -14,7 +14,7 @@ final class UserController extends AbstractController
     public function __construct()
     {
         parent::__construct();
-        $this->users = new UserRepository();
+        $this->users = UserRepository::getInstance();
     }
 
     public function index(array $params = []): void

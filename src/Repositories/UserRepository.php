@@ -7,6 +7,18 @@ use App\Models\User;
 
 final class UserRepository extends AbstractRepository
 {
+    private static ?UserRepository $instance = null;
+
+    /**
+     * Jedna instancja repozytorium w cyklu zadania -> spojnosc i kontrola.
+     * Konstruktor pozostaje publiczny (z AbstractRepository), aby mozna bylo
+     * wstrzyknac mock PDO w testach (DI), ale produkcyjnie uzywamy getInstance().
+     */
+    public static function getInstance(): UserRepository
+    {
+        return self::$instance ??= new self();
+    }
+
     public function findById(int $id): ?User
     {
         $row = $this->fetchOne(
