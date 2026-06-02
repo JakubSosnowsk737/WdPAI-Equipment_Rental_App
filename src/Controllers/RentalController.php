@@ -27,8 +27,7 @@ final class RentalController extends AbstractController
         $equipmentId = (int) ($this->request->input('equipment_id') ?? 0);
         $eq = $this->equipment->findById($equipmentId);
         if ($eq === null) {
-            http_response_code(404);
-            $this->render('errors/404');
+            $this->render('errors/404', [], 404);
             return;
         }
         $this->render('rentals/new', ['eq' => $eq, 'errors' => []]);
@@ -64,15 +63,13 @@ final class RentalController extends AbstractController
         $id = (int) ($params['id'] ?? 0);
         $rental = $this->rentals->findById($id);
         if ($rental === null) {
-            http_response_code(404);
-            $this->render('errors/404');
+            $this->render('errors/404', [], 404);
             return;
         }
         // Klient moze zwrocic wlasne; admin/pracownik dowolne.
         $role = Session::userRole();
         if ($role === 'klient' && $rental->userId !== (int) Session::userId()) {
-            http_response_code(403);
-            $this->render('errors/403');
+            $this->render('errors/403', [], 403);
             return;
         }
         $res = $this->service->returnRental($id);

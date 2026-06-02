@@ -36,8 +36,7 @@ final class EquipmentController extends AbstractController
         $id = (int) ($params['id'] ?? 0);
         $eq = $this->equipment->findById($id);
         if ($eq === null) {
-            http_response_code(404);
-            $this->render('errors/404');
+            $this->render('errors/404', [], 404);
             return;
         }
         $this->render('equipment/show', [
@@ -136,8 +135,7 @@ final class EquipmentController extends AbstractController
         $id = (int) ($params['id'] ?? 0);
         $eq = $this->equipment->findById($id);
         if ($eq === null) {
-            http_response_code(404);
-            $this->render('errors/404');
+            $this->render('errors/404', [], 404);
             return;
         }
         $this->render('admin/equipment/form', [
