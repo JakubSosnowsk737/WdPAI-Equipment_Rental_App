@@ -95,6 +95,8 @@ a nie aktualnej ceny, wiec nie jest redundancja).
   upload obrazkow
 - Dynamiczne wyszukiwanie sprzetu przez FETCH API (`/api/equipment`)
 - Strony bledow 400/403/404/500 obslugiwane globalnie (`ErrorHandler`)
+- Minimalistyczny design (biel + ciemna zielen) z trybem jasnym/ciemnym
+  (przelacznik w naglowku, zapamietywanie w `localStorage`, `prefers-color-scheme`)
 
 ## Scenariusz testowy
 
@@ -186,7 +188,7 @@ przygotowane i wlaczane zmienna `SESSION_SECURE=true` w srodowisku z HTTPS.
 - [x] PHP obiektowy, bez frameworka
 - [x] PostgreSQL
 - [x] MVC + Service + Repository + Middleware
-- [x] Estetyczny, responsywny UI (media queries 768/480)
+- [x] Estetyczny, responsywny UI (media queries 768/480) + tryb jasny/ciemny
 - [x] Logowanie, sesja, wylogowanie
 - [x] Role i weryfikacja uprawnien w trakcie dzialania
 - [x] Zarzadzanie uzytkownikami
@@ -261,20 +263,24 @@ Diagram graficzny: [`docs/architecture.svg`](docs/architecture.svg). Wersja teks
 ## Screeny
 
 Zrzuty ekranu w katalogu [`docs/screenshots/`](docs/screenshots) (wygenerowane z
-dzialajacej aplikacji w Dockerze).
+dzialajacej aplikacji w Dockerze). Interfejs jest minimalistyczny, w kolorystyce
+**biel + ciemna zielen**, z obsluga **trybu jasnego i ciemnego** (przelacznik w
+naglowku, zapamietywany w `localStorage`, respektuje `prefers-color-scheme`).
 
-**Wersja webowa (desktop, 1280px):**
+**Motyw jasny vs ciemny (desktop, 1280px):**
 
-| Katalog sprzetu | Panel administratora |
+| Tryb jasny | Tryb ciemny |
 |---|---|
-| ![Katalog](docs/screenshots/catalog.png) | ![Panel admina](docs/screenshots/admin-equipment.png) |
+| ![Katalog jasny](docs/screenshots/catalog.png) | ![Katalog ciemny](docs/screenshots/catalog-dark.png) |
+| ![Strona glowna jasna](docs/screenshots/home.png) | ![Strona glowna ciemna](docs/screenshots/home-dark.png) |
+| ![Panel admina jasny](docs/screenshots/admin-equipment.png) | ![Panel admina ciemny](docs/screenshots/admin-equipment-dark.png) |
 
-Dodatkowo: `home.png`, `login.png`, `admin-users.png`, `admin-rentals.png`.
+Dodatkowo: `login.png`, `admin-users.png`, `admin-rentals.png`.
 
 **Wersja mobilna (390px, responsywny uklad jednokolumnowy):**
 
-| Strona glowna | Katalog |
+| Strona glowna (jasny) | Katalog (ciemny) |
 |---|---|
-| ![Mobile home](docs/screenshots/mobile-home.png) | ![Mobile katalog](docs/screenshots/mobile-catalog.png) |
+| ![Mobile home](docs/screenshots/mobile-home.png) | ![Mobile katalog ciemny](docs/screenshots/mobile-catalog-dark.png) |
 
-Dodatkowo: `mobile-admin-equipment.png`.
+Dodatkowo: `mobile-catalog.png`, `mobile-admin-equipment.png`.
