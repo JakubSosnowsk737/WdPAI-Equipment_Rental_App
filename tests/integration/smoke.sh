@@ -35,5 +35,14 @@ if [ "$code" != "302" ] && [ "$code" != "403" ]; then
 fi
 echo "[OK]   /admin/users bez logowania -> $code"
 
+# CSRF - POST logowania bez tokenu powinien zostac odrzucony (403)
+code=$(curl -s -o /dev/null -w '%{http_code}' -b "$COOKIES" -c "$COOKIES" \
+    -d "email=a@b.pl&password=x" "$BASE/login")
+if [ "$code" != "403" ]; then
+    echo "[FAIL] POST /login bez CSRF -> $code (oczekiwano 403)"
+    exit 1
+fi
+echo "[OK]   POST /login bez CSRF -> $code"
+
 rm -f "$COOKIES"
 echo "=== ALL OK ==="
