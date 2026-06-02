@@ -5,7 +5,8 @@ namespace App\Repositories;
 
 use App\Models\User;
 
-final class UserRepository extends AbstractRepository
+// Nie 'final' - umozliwia mockowanie w testach jednostkowych (PHPUnit).
+class UserRepository extends AbstractRepository
 {
     // Jawna lista kolumn - pobieramy tylko to, czego potrzebuje model.
     // Unikamy SELECT * (mniej danych, brak przypadkowego wycieku nowych kolumn).

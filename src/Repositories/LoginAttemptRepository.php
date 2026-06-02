@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-final class LoginAttemptRepository extends AbstractRepository
+// Nie 'final' - umozliwia mockowanie w testach jednostkowych (PHPUnit).
+class LoginAttemptRepository extends AbstractRepository
 {
     /**
      * Zapisuje probe logowania do audytu. Nigdy nie zapisujemy hasla.
