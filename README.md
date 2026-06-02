@@ -274,6 +274,7 @@ naglowku, zapamietywany w `localStorage`, respektuje `prefers-color-scheme`).
 | ![Katalog jasny](docs/screenshots/catalog.png) | ![Katalog ciemny](docs/screenshots/catalog-dark.png) |
 | ![Strona glowna jasna](docs/screenshots/home.png) | ![Strona glowna ciemna](docs/screenshots/home-dark.png) |
 | ![Panel admina jasny](docs/screenshots/admin-equipment.png) | ![Panel admina ciemny](docs/screenshots/admin-equipment-dark.png) |
+| ![Szczegoly sprzetu jasny](docs/screenshots/equipment-detail.png) | ![Szczegoly sprzetu ciemny](docs/screenshots/equipment-detail-dark.png) |
 
 Dodatkowo: `login.png`, `admin-users.png`, `admin-rentals.png`.
 
