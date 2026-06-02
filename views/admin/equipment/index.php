@@ -21,6 +21,7 @@ ob_start();
                     <a href="/admin/equipment/<?= (int) $eq->id ?>/edit" class="btn-sm">Edytuj</a>
                     <form method="post" action="/admin/equipment/<?= (int) $eq->id ?>/delete"
                           style="display:inline" onsubmit="return confirm('Usunac?')">
+                        <?= App\Core\Csrf::field() ?>
                         <button class="btn-sm btn-danger" type="submit">Usun</button>
                     </form>
                 </td>

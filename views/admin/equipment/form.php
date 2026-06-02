@@ -16,8 +16,9 @@ ob_start();
         </ul>
     <?php endif; ?>
     <form method="post" action="<?= $isEdit ? '/admin/equipment/' . (int) $eq->id : '/admin/equipment' ?>">
+        <?= App\Core\Csrf::field() ?>
         <label>Nazwa
-            <input type="text" name="name" value="<?= htmlspecialchars($eq->name ?? '', ENT_QUOTES) ?>" required>
+            <input type="text" name="name" value="<?= htmlspecialchars($eq->name ?? '', ENT_QUOTES) ?>" required maxlength="150">
         </label>
         <label>Kategoria
             <select name="category_id" required>
@@ -44,6 +45,7 @@ ob_start();
         <h3>Obrazki</h3>
         <form method="post" enctype="multipart/form-data"
               action="/admin/equipment/<?= (int) $eq->id ?>/images">
+            <?= App\Core\Csrf::field() ?>
             <input type="file" name="image" accept="image/*" required>
             <button type="submit" class="btn">Dodaj obraz</button>
         </form>

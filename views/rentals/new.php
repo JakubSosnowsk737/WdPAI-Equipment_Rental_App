@@ -14,6 +14,7 @@ ob_start();
         </ul>
     <?php endif; ?>
     <form method="post" action="/rentals">
+        <?= App\Core\Csrf::field() ?>
         <input type="hidden" name="equipment_id" value="<?= (int) $eq->id ?>">
         <label>Ilosc
             <input type="number" name="quantity" min="1" max="<?= $eq->availableQuantity ?>" value="1" required>

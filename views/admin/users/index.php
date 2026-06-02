@@ -16,6 +16,7 @@ ob_start();
                 <td><?= htmlspecialchars($u->fullName(), ENT_QUOTES) ?></td>
                 <td>
                     <form method="post" action="/admin/users/<?= (int) $u->id ?>/role" style="display:inline">
+                        <?= App\Core\Csrf::field() ?>
                         <select name="role">
                             <option value="klient"    <?= $u->role === 'klient'    ? 'selected' : '' ?>>klient</option>
                             <option value="pracownik" <?= $u->role === 'pracownik' ? 'selected' : '' ?>>pracownik</option>
@@ -27,6 +28,7 @@ ob_start();
                 <td>
                     <form method="post" action="/admin/users/<?= (int) $u->id ?>/delete"
                           onsubmit="return confirm('Usunac uzytkownika?')">
+                        <?= App\Core\Csrf::field() ?>
                         <button class="btn-sm btn-danger" type="submit">Usun</button>
                     </form>
                 </td>

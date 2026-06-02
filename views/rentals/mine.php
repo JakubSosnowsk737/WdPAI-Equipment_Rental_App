@@ -22,6 +22,7 @@ ob_start();
                     <td>
                         <?php if ($r->status !== 'zakonczone' && $r->status !== 'anulowane'): ?>
                             <form method="post" action="/rentals/<?= (int) $r->id ?>/return" style="display:inline">
+                                <?= App\Core\Csrf::field() ?>
                                 <button class="btn-sm" type="submit">Zwroc</button>
                             </form>
                         <?php endif; ?>
