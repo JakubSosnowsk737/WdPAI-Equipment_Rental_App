@@ -4,7 +4,10 @@ use App\Models\Category;
 ob_start();
 ?>
 <section>
-    <h2>Dostepny sprzet</h2>
+    <div class="page-head">
+        <h2>Dostepny sprzet</h2>
+        <p class="sub">Przegladaj i rezerwuj sprzet dostepny w wypozyczalni.</p>
+    </div>
     <div class="search-bar">
         <input type="text" id="eq-search" placeholder="Szukaj sprzetu...">
         <select id="eq-category">
@@ -21,7 +24,7 @@ ob_start();
                 <p class="cat"><?= htmlspecialchars($eq->categoryName ?? '', ENT_QUOTES) ?></p>
                 <p><?= htmlspecialchars($eq->description ?? '', ENT_QUOTES) ?></p>
                 <p class="rate"><?= number_format($eq->dailyRate, 2) ?> zl / dzien</p>
-                <p>Dostepne: <?= $eq->availableQuantity ?> / <?= $eq->totalQuantity ?></p>
+                <p class="stock">Dostepne: <?= $eq->availableQuantity ?> / <?= $eq->totalQuantity ?></p>
                 <a href="/equipment/<?= (int) $eq->id ?>" class="btn-sm">Szczegoly</a>
             </article>
         <?php endforeach; ?>

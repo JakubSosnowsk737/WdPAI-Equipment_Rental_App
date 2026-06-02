@@ -20,7 +20,7 @@
                 <p class="cat">${escapeHtml(eq.category_name || '')}</p>
                 <p>${escapeHtml(eq.description || '')}</p>
                 <p class="rate">${Number(eq.daily_rate).toFixed(2)} zl / dzien</p>
-                <p>Dostepne: ${eq.available_quantity} / ${eq.total_quantity}</p>
+                <p class="stock">Dostepne: ${eq.available_quantity} / ${eq.total_quantity}</p>
                 <a href="/equipment/${eq.id}" class="btn-sm">Szczegoly</a>
             </article>
         `).join('');

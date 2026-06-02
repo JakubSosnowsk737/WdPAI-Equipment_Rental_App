@@ -5,7 +5,7 @@ use App\Models\Equipment;
 ob_start();
 ?>
 <section class="equipment-detail">
-    <p><a href="/equipment">&laquo; powrot do katalogu</a></p>
+    <p><a href="/equipment" class="back">&laquo; powrot do katalogu</a></p>
     <h2><?= htmlspecialchars($eq->name, ENT_QUOTES) ?></h2>
     <?php if (!empty($images)): ?>
         <div class="gallery">
