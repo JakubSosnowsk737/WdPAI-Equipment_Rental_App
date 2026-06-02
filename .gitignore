@@ -8,3 +8,4 @@ node_modules/
 .DS_Store
 public/uploads/*
 !public/uploads/.gitkeep
+.phpunit.result.cache
