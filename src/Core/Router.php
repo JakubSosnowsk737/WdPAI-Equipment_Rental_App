@@ -45,11 +45,16 @@ final class Router
 
     public function dispatch(Request $request): void
     {
+        $pathMatchedButMethodNot = false;
+
         foreach ($this->routes as $route) {
-            if ($route['method'] !== $request->method()) {
+            $matchesPath = (bool) preg_match($route['pattern'], $request->path(), $m);
+            if (!$matchesPath) {
                 continue;
             }
-            if (!preg_match($route['pattern'], $request->path(), $m)) {
+            if ($route['method'] !== $request->method()) {
+                // Sciezka istnieje, ale metoda sie nie zgadza (np. GET na endpoint POST).
+                $pathMatchedButMethodNot = true;
                 continue;
             }
             $params = array_filter($m, 'is_string', ARRAY_FILTER_USE_KEY);
@@ -70,6 +75,7 @@ final class Router
             return;
         }
 
-        ErrorHandler::renderErrorPage(404);
+        // Metoda niedozwolona dla istniejacej sciezki -> 405; w przeciwnym razie 404.
+        ErrorHandler::renderErrorPage($pathMatchedButMethodNot ? 405 : 404);
     }
 }
