@@ -529,33 +529,21 @@ wlaczana zmienna `SESSION_SECURE=true`.
 | **Generic errors** | Nie ujawnia czy email istnieje | jednakowy komunikat logowania |
 | **Walidacja** | Server-side na wejsciach | `AuthService`, `filter_var`, limity dlugosci |
 
-### Checklist Security Bingo
+### Plansza Security Bingo (24/25)
 
-- [x] **A1** Ochrona przed SQL Injection (prepared statements, PDO)
-- [x] **A2** Login/register tylko POST, GET renderuje widok (405 dla zlej metody)
-- [x] **A3** Hasla nigdy nie sa logowane
-- [x] **A4** Rate limiting – blokada po 5 nieudanych probach (okno 15 min)
-- [x] **A5** Poprawne kody HTTP (400/401/403/404/405/429/500)
-- [x] **B1** Nie ujawniamy czy email istnieje (generic error)
-- [x] **B2** CSRF token w formularzu logowania
-- [x] **B3** Regeneracja ID sesji po logowaniu
-- [x] **B4** Walidacja zlozonosci hasla (min 8 znakow, litera + cyfra)
-- [x] **B5** Haslo nie jest przekazywane do widokow
-- [x] **C1** Walidacja email server-side (`filter_var`)
-- [x] **C2** CSRF token w formularzu rejestracji
-- [x] **C3** Cookie sesyjne z flaga `HttpOnly`
-- [x] **C4** Sprawdzenie unikalnosci emaila (bez ujawniania)
-- [x] **C5** Pobieramy tylko niezbedne kolumny z bazy (jawna lista zamiast `SELECT *`)
-- [x] **D1** `UserRepository` jako Singleton
-- [x] **D2** Limit dlugosci wejscia (email 150, imie/nazwisko 80, haslo 200)
-- [x] **D3** Cookie sesyjne z flaga `Secure` (sterowane `SESSION_SECURE`)
-- [x] **D4** Escaping danych w widokach (XSS)
-- [x] **D5** Poprawne wylogowanie (`session_destroy` + usuniecie cookie)
-- [x] **E2** Hasla jako hash bcrypt
-- [x] **E3** Cookie `SameSite=Lax`
-- [x] **E4** Brak stack trace w produkcji (`APP_DEBUG=false`)
-- [x] **E5** Logowanie nieudanych prob (email + IP, bez hasel)
-- [ ] **E1** Tylko HTTPS – *celowo pominiete* (flaga `Secure` przygotowana w kodzie)
+Legenda: ✅ zaimplementowane · ❌ celowo pominiete (HTTPS).
+
+|   | A | B | C | D | E |
+|:-:|---|---|---|---|---|
+| **1** | ✅ **A1**<br>Ochrona przed SQL injection (prepared statements / brak konkatenacji SQL) | ✅ **B1**<br>Nie zdradzam, czy email istnieje – komunikat „Email lub haslo niepoprawne" | ✅ **C1**<br>Walidacja formatu email po stronie serwera | ✅ **D1**<br>UserRepository zarzadzany jako singleton | ❌ **E1**<br>Logowanie i rejestracja tylko przez HTTPS |
+| **2** | ✅ **A2**<br>login/register przyjmuje dane tylko na POST, GET renderuje widok | ✅ **B2**<br>CSRF token w formularzu logowania | ✅ **C2**<br>CSRF token w formularzu rejestracji | ✅ **D2**<br>Ograniczam dlugosc wejscia (email, haslo, imie…) | ✅ **E2**<br>Hasla przechowywane jako hash (bcrypt, `password_hash`) |
+| **3** | ✅ **A3**<br>Hasla nigdy nie sa logowane w logach / errorach | ✅ **B3**<br>Po poprawnym logowaniu regeneruje ID sesji | ✅ **C3**<br>Cookie sesyjne ma flage `HttpOnly` | ✅ **D3**<br>Cookie sesyjne ma flage `Secure` | ✅ **E3**<br>Cookie ma ustawione `SameSite` (Lax) |
+| **4** | ✅ **A4**<br>Limit prob logowania / blokada czasowa po wielu probach | ✅ **B4**<br>Waliduje zlozonosc hasla (min. dlugosc itd.) | ✅ **C4**<br>Przy rejestracji sprawdzam, czy email jest juz w bazie | ✅ **D4**<br>Dane w widokach sa escapowane (ochrona przed XSS) | ✅ **E4**<br>W produkcji nie pokazuje stack trace / surowych bledow |
+| **5** | ✅ **A5**<br>Zwracam sensowne kody HTTP (400/401/403 przy bledach) | ✅ **B5**<br>Haslo nie jest przekazywane do widokow ani `echo`/`var_dump` | ✅ **C5**<br>Z bazy pobieram tylko minimalny zestaw danych o uzytkowniku | ✅ **D5**<br>Mam poprawne wylogowanie – niszcze sesje uzytkownika | ✅ **E5**<br>Loguje nieudane proby logowania (bez hasel) do audytu |
+
+> **E1 (HTTPS)** jest jedynym celowo pominietym polem – aplikacja dziala lokalnie
+> po HTTP. Obsluga flagi `Secure` na cookie jest jednak przygotowana w kodzie
+> (`Session::start()`) i wlaczana zmienna `SESSION_SECURE=true`.
 
 ---
 
