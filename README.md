@@ -118,9 +118,10 @@ a nie aktualnej ceny, wiec nie jest redundancja).
 
 ## Testy
 
-- **Jednostkowe** (PHPUnit):
+- **Jednostkowe** (PHPUnit) - 11 testow, 18 asercji:
   ```bash
-  vendor/bin/phpunit
+  composer install
+  vendor/bin/phpunit            # lub: docker compose exec php vendor/bin/phpunit
   ```
   Pokrywaja `User` (model), `AuthService` (mock UserRepository),
   `LoginThrottle` (mock LoginAttemptRepository) oraz `Csrf`.
@@ -180,7 +181,7 @@ przygotowane i wlaczane zmienna `SESSION_SECURE=true` w srodowisku z HTTPS.
 ## Checklista wymagan
 
 - [x] Docker + docker-compose (PHP + Postgres + nginx)
-- [x] GIT z historia rozwoju (60 commitow)
+- [x] GIT z historia rozwoju (60+ commitow, rozwoj od marca do czerwca)
 - [x] HTML5, CSS, JavaScript (FETCH API)
 - [x] PHP obiektowy, bez frameworka
 - [x] PostgreSQL
