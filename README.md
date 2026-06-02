@@ -259,7 +259,21 @@ Diagram graficzny: [`docs/architecture.svg`](docs/architecture.svg). Wersja teks
 
 ## Screeny
 
-W katalogu `docs/screenshots/`:
-- `home.png`, `catalog.png`, `equipment-detail.png`
-- `mobile-home.png`, `mobile-catalog.png` (wersja mobilna)
-- `admin-users.png`, `admin-equipment.png`, `admin-rentals.png`
+Zrzuty ekranu w katalogu [`docs/screenshots/`](docs/screenshots) (wygenerowane z
+dzialajacej aplikacji w Dockerze).
+
+**Wersja webowa (desktop, 1280px):**
+
+| Katalog sprzetu | Panel administratora |
+|---|---|
+| ![Katalog](docs/screenshots/catalog.png) | ![Panel admina](docs/screenshots/admin-equipment.png) |
+
+Dodatkowo: `home.png`, `login.png`, `admin-users.png`, `admin-rentals.png`.
+
+**Wersja mobilna (390px, responsywny uklad jednokolumnowy):**
+
+| Strona glowna | Katalog |
+|---|---|
+| ![Mobile home](docs/screenshots/mobile-home.png) | ![Mobile katalog](docs/screenshots/mobile-catalog.png) |
+
+Dodatkowo: `mobile-admin-equipment.png`.
