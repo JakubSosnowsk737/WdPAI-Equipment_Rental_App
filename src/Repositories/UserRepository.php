@@ -7,6 +7,10 @@ use App\Models\User;
 
 final class UserRepository extends AbstractRepository
 {
+    // Jawna lista kolumn - pobieramy tylko to, czego potrzebuje model.
+    // Unikamy SELECT * (mniej danych, brak przypadkowego wycieku nowych kolumn).
+    private const COLUMNS = 'id, email, password_hash, first_name, last_name, role, created_at';
+
     private static ?UserRepository $instance = null;
 
     /**
@@ -22,7 +26,7 @@ final class UserRepository extends AbstractRepository
     public function findById(int $id): ?User
     {
         $row = $this->fetchOne(
-            'SELECT * FROM users WHERE id = :id',
+            'SELECT ' . self::COLUMNS . ' FROM users WHERE id = :id',
             ['id' => $id]
         );
         return $row ? User::fromRow($row) : null;
@@ -31,7 +35,7 @@ final class UserRepository extends AbstractRepository
     public function findByEmail(string $email): ?User
     {
         $row = $this->fetchOne(
-            'SELECT * FROM users WHERE email = :email',
+            'SELECT ' . self::COLUMNS . ' FROM users WHERE email = :email',
             ['email' => $email]
         );
         return $row ? User::fromRow($row) : null;
@@ -56,7 +60,7 @@ final class UserRepository extends AbstractRepository
     /** @return User[] */
     public function findAll(): array
     {
-        $rows = $this->fetchAll('SELECT * FROM users ORDER BY id');
+        $rows = $this->fetchAll('SELECT ' . self::COLUMNS . ' FROM users ORDER BY id');
         return array_map([User::class, 'fromRow'], $rows);
     }
 
