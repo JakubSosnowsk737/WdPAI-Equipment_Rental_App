@@ -1,47 +1,48 @@
-# WypozyczalniaPRO – system wypozyczania sprzetu
+# WypożyczalniaPRO – system wypożyczania sprzętu
 
-> Webowa wypozyczalnia sprzetu (narzedzia, ogrod, sport, elektronika).
+> Webowa wypożyczalnia sprzętu (narzędzia, ogród, sport, elektronika).
 > Projekt zaliczeniowy – kurs WdPAI, Politechnika Krakowska.
 
-Minimalistyczny interfejs (biel + ciemna zielen) z trybem jasnym i ciemnym,
+Minimalistyczny interfejs (biel + ciemna zieleń) z trybem jasnym i ciemnym,
 zbudowany w czystym PHP 8.2 (OOP, bez frameworka) na PostgreSQL, uruchamiany
 jednym poleceniem `docker compose up`.
 
 ---
 
-## Spis tresci
+## Spis treści
 
 1. [Opis aplikacji](#opis-aplikacji)
 2. [Technologie i architektura](#technologie-i-architektura)
 3. [Instrukcja uruchomienia](#instrukcja-uruchomienia)
-4. [Zmienne srodowiskowe](#zmienne-srodowiskowe)
+4. [Zmienne środowiskowe](#zmienne-środowiskowe)
 5. [Konta testowe](#konta-testowe)
 6. [Endpointy](#endpointy-srcroutesphp)
 7. [Flow aplikacji](#flow-aplikacji)
 8. [Schemat bazy danych](#schemat-bazy-danych)
 9. [Elementy bazy danych](#elementy-bazy-danych)
-10. [Bezpieczenstwo – Security Bingo](#bezpieczenstwo--security-bingo)
+10. [Bezpieczeństwo – Security Bingo](#bezpieczeństwo--security-bingo)
 11. [Widoki aplikacji](#widoki-aplikacji)
-12. [Uruchamianie testow](#uruchamianie-testow)
-13. [Checklist wymagan](#checklist-wymagan)
+12. [Scenariusz testowy](#scenariusz-testowy)
+13. [Uruchamianie testów](#uruchamianie-testów)
+14. [Checklista wymagań](#checklista-wymagań)
 
 ---
 
 ## Opis aplikacji
 
-**WypozyczalniaPRO** to aplikacja webowa do obslugi wypozyczalni sprzetu.
-Goscie przegladaja katalog z wyszukiwarka, zalogowani klienci skladaja
-wypozyczenia (z interaktywnym kalendarzem wyboru dat), a personel i administrator
-zarzadzaja sprzetem, wypozyczeniami oraz uzytkownikami.
+**WypożyczalniaPRO** to aplikacja webowa do obsługi wypożyczalni sprzętu.
+Goście przeglądają katalog z wyszukiwarką, zalogowani klienci składają
+wypożyczenia (z interaktywnym kalendarzem wyboru dat), a personel i administrator
+zarządzają sprzętem, wypożyczeniami oraz użytkownikami.
 
-### Glowne funkcje wg roli
+### Główne funkcje wg roli
 
-| Rola | Dostepne funkcje |
+| Rola | Dostępne funkcje |
 |---|---|
-| **Gosc** | Przegladanie katalogu, dynamiczne wyszukiwanie (Fetch API), filtrowanie po kategorii, szczegoly sprzetu |
-| **Klient** | Rejestracja, logowanie, wypozyczanie sprzetu (kalendarz dat), historia "Moje wypozyczenia", zgloszenie zwrotu |
-| **Pracownik** | Podglad wszystkich wypozyczen, oznaczanie zwrotow |
-| **Administrator** | Wszystko co pracownik + CRUD sprzetu (z uploadem zdjec), zarzadzanie uzytkownikami i ich rolami |
+| **Gość** | Przeglądanie katalogu, dynamiczne wyszukiwanie (Fetch API), filtrowanie po kategorii, szczegóły sprzętu |
+| **Klient** | Rejestracja, logowanie, wypożyczanie sprzętu (kalendarz dat), historia „Moje wypożyczenia", zgłoszenie zwrotu |
+| **Pracownik** | Podgląd wszystkich wypożyczeń, oznaczanie zwrotów |
+| **Administrator** | Wszystko co pracownik + CRUD sprzętu (z wgrywaniem zdjęć), zarządzanie użytkownikami i ich rolami |
 
 ---
 
@@ -57,13 +58,13 @@ zarzadzaja sprzetem, wypozyczeniami oraz uzytkownikami.
 | Konteneryzacja | Docker + Docker Compose |
 | Frontend | HTML5, CSS3 (zmienne CSS, media queries), Vanilla JavaScript (Fetch API) |
 | Testy | PHPUnit 10, Bash + curl (testy integracyjne) |
-| Autoloader | Composer (PSR-4) + wlasny autoloader jako fallback |
+| Autoloader | Composer (PSR-4) + własny autoloader jako fallback |
 
 ### Architektura MVC + Service + Repository
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      PRZEGLADARKA                       │
+│                      PRZEGLĄDARKA                       │
 │   HTML5 + CSS (tryb jasny/ciemny) + JavaScript          │
 │   Fetch API (wyszukiwarka, kalendarz dat)               │
 └──────────────────────────┬──────────────────────────────┘
@@ -77,7 +78,7 @@ zarzadzaja sprzetem, wypozyczeniami oraz uzytkownikami.
 │                      PHP-FPM 8.2                        │
 │  ┌──────────────────────────────────────────────────┐   │
 │  │  Router  (Method + URI → Controller@Action)      │   │
-│  │  obsluga 404 / 405 (metoda niedozwolona)         │   │
+│  │  obsługa 404 / 405 (metoda niedozwolona)         │   │
 │  └────────────────────┬─────────────────────────────┘   │
 │  ┌────────────────────▼─────────────────────────────┐   │
 │  │  Middleware                                      │   │
@@ -117,7 +118,7 @@ zarzadzaja sprzetem, wypozyczeniami oraz uzytkownikami.
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Struktura katalogow
+### Struktura katalogów
 
 ```
 Projekt WdPAI/
@@ -126,11 +127,11 @@ Projekt WdPAI/
 │   ├── views.sql               # Widoki v_active_rentals, v_popular_equipment
 │   ├── triggers.sql            # Trigger + funkcja triggera
 │   ├── functions.sql           # fn_calculate_rental_cost
-│   ├── seed.sql                # Dane przykladowe (konta, sprzet)
-│   ├── install.sql             # Skrypt laczacy calosc (psql -f)
+│   ├── seed.sql                # Dane przykładowe (konta, sprzęt)
+│   ├── install.sql             # Skrypt łączący całość (psql -f)
 │   └── migrations/             # Migracje przyrostowe (login_attempts)
 ├── docs/
-│   ├── erd.svg                 # Diagram ERD (zrodlo: erd.drawio, opis: erd.md)
+│   ├── erd.svg                 # Diagram ERD (źródło: erd.drawio, opis: erd.md)
 │   ├── architecture.svg        # Diagram warstwowy
 │   └── screenshots/            # Zrzuty (web + mobile, jasny + ciemny)
 ├── docker/
@@ -142,7 +143,7 @@ Projekt WdPAI/
 │   │                           # Response, View, Session, Csrf, ErrorHandler
 │   ├── Middleware/             # AuthMiddleware, RoleMiddleware, CsrfMiddleware
 │   ├── Models/                 # User, Equipment, Category, Rental (readonly DTO)
-│   ├── Repositories/           # AbstractRepository + 6 repozytoriow
+│   ├── Repositories/           # AbstractRepository + 6 repozytoriów
 │   ├── Services/               # AuthService, RentalService, LoginThrottle
 │   ├── bootstrap.php           # Autoloader + .env + ErrorHandler
 │   └── routes.php              # Definicje tras
@@ -151,13 +152,13 @@ Projekt WdPAI/
 │   ├── css/style.css           # System wizualny + tryb jasny/ciemny
 │   ├── js/search.js            # Wyszukiwarka (Fetch API)
 │   ├── js/calendar.js          # Kalendarz wyboru dat
-│   ├── js/theme.js             # Przelacznik motywu
-│   ├── uploads/                # Wgrane zdjecia sprzetu
+│   ├── js/theme.js             # Przełącznik motywu
+│   ├── uploads/                # Wgrane zdjęcia sprzętu
 │   └── index.php               # Front controller
 ├── tests/
 │   ├── Unit/                   # UserModelTest, AuthServiceTest,
 │   │                           # LoginThrottleTest, CsrfTest
-│   ├── integration/smoke.sh    # Testy endpointow (curl)
+│   ├── integration/smoke.sh    # Testy endpointów (curl)
 │   └── bootstrap.php
 ├── .env.example
 ├── composer.json
@@ -177,15 +178,15 @@ Projekt WdPAI/
 ### 1. Klonowanie repozytorium
 
 ```bash
-git clone <URL_REPO>
-cd "Projekt WdPAI"
+git clone https://github.com/JakubSosnowsk737/WdPAI-Equipment_Rental_App.git
+cd WdPAI-Equipment_Rental_App
 ```
 
-### 2. Konfiguracja srodowiska
+### 2. Konfiguracja środowiska
 
 ```bash
 cp .env.example .env
-# domyslne wartosci dzialaja od razu
+# domyślne wartości działają od razu
 ```
 
 ### 3. Uruchomienie
@@ -196,10 +197,10 @@ docker compose up -d --build
 
 Przy pierwszym uruchomieniu Docker:
 - buduje obraz PHP (z `pdo_pgsql`),
-- inicjalizuje baze danych skryptami z `database/` (montowane do
+- inicjalizuje bazę danych skryptami z `database/` (montowane do
   `docker-entrypoint-initdb.d`: schema → views → triggers → functions → seed).
 
-**Aplikacja dostepna pod:** `http://localhost:8080`
+**Aplikacja dostępna pod:** `http://localhost:8080`
 **PostgreSQL:** `localhost:5432`
 
 ### 4. Testy w kontenerze
@@ -210,7 +211,7 @@ docker compose exec php vendor/bin/phpunit --testdox
 bash tests/integration/smoke.sh
 ```
 
-### 5. Restart z czysta baza danych
+### 5. Restart z czystą bazą danych
 
 ```bash
 docker compose down -v   # usuwa wolumen (reset bazy)
@@ -225,34 +226,34 @@ docker compose down
 
 ---
 
-## Zmienne srodowiskowe
+## Zmienne środowiskowe
 
 Plik `.env` (wzorzec w `.env.example`):
 
-| Zmienna | Opis | Wartosc domyslna |
+| Zmienna | Opis | Wartość domyślna |
 |---|---|---|
 | `APP_NAME` | Nazwa aplikacji | `WypozyczalniaPRO` |
-| `APP_ENV` | Srodowisko | `dev` |
+| `APP_ENV` | Środowisko | `dev` |
 | `APP_DEBUG` | Tryb debugowania (stack trace) | `true` |
 | `DB_HOST` | Host bazy danych | `db` |
 | `DB_PORT` | Port PostgreSQL | `5432` |
 | `DB_NAME` | Nazwa bazy | `wypozyczalnia` |
-| `DB_USER` | Uzytkownik DB | `app` |
-| `DB_PASSWORD` | Haslo DB | `app_secret` |
+| `DB_USER` | Użytkownik DB | `app` |
+| `DB_PASSWORD` | Hasło DB | `app_secret` |
 | `SESSION_NAME` | Nazwa ciasteczka sesji | `wpro_sid` |
-| `SESSION_LIFETIME` | Czas zycia sesji (s) | `3600` |
+| `SESSION_LIFETIME` | Czas życia sesji (s) | `3600` |
 | `SESSION_SECURE` | Flaga `Secure` na cookie (true dla HTTPS) | `false` |
 
 > Na produkcji ustaw `APP_DEBUG=false` (ukrywa stack trace) oraz
-> `SESSION_SECURE=true` (gdy aplikacja dziala po HTTPS).
+> `SESSION_SECURE=true` (gdy aplikacja działa po HTTPS).
 
 ---
 
 ## Konta testowe
 
-Hasla z `database/seed.sql` (przechowywane jako hash bcrypt):
+Hasła z `database/seed.sql` (przechowywane jako hash bcrypt):
 
-| Email | Haslo | Rola |
+| E-mail | Hasło | Rola |
 |---|---|---|
 | `admin@wpro.pl` | `admin123` | administrator |
 | `pracownik@wpro.pl` | `pracownik123` | pracownik |
@@ -264,57 +265,57 @@ Hasla z `database/seed.sql` (przechowywane jako hash bcrypt):
 ## Endpointy (`src/routes.php`)
 
 Routing zdefiniowany w `src/routes.php`, front controller: `public/index.php`.
-Wszystkie zadania modyfikujace stan (`POST`) przechodza przez **globalny
-`CsrfMiddleware`** – brak/niepoprawny token konczy sie kodem `403`.
+Wszystkie żądania modyfikujące stan (`POST`) przechodzą przez **globalny
+`CsrfMiddleware`** – brak/niepoprawny token kończy się kodem `403`.
 
 ### Autentykacja
 
 | Metoda | URL | Middleware | Akcja |
 |--------|-----|-----------|-------|
 | `GET`  | `/register` | — | Formularz rejestracji |
-| `POST` | `/register` | CSRF | Rejestracja uzytkownika (rola `klient`) |
+| `POST` | `/register` | CSRF | Rejestracja użytkownika (rola `klient`) |
 | `GET`  | `/login` | — | Formularz logowania |
-| `POST` | `/login` | CSRF | Logowanie (limit prob, audyt) |
+| `POST` | `/login` | CSRF | Logowanie (limit prób, audyt) |
 | `GET`  | `/logout` | — | Wylogowanie, zniszczenie sesji |
 
-### Sprzet (publiczne)
+### Sprzęt (publiczne)
 
 | Metoda | URL | Middleware | Akcja |
 |--------|-----|-----------|-------|
-| `GET`  | `/` | — | Strona glowna (hero) |
-| `GET`  | `/equipment` | — | Katalog sprzetu z wyszukiwarka |
-| `GET`  | `/api/equipment` | — | Wyszukiwanie sprzetu (JSON, Fetch API) |
-| `GET`  | `/equipment/{id}` | — | Szczegoly sprzetu + podobny sprzet |
+| `GET`  | `/` | — | Strona główna (hero) |
+| `GET`  | `/equipment` | — | Katalog sprzętu z wyszukiwarką |
+| `GET`  | `/api/equipment` | — | Wyszukiwanie sprzętu (JSON, Fetch API) |
+| `GET`  | `/equipment/{id}` | — | Szczegóły sprzętu + podobny sprzęt |
 
-### Wypozyczenia (zalogowani)
+### Wypożyczenia (zalogowani)
 
 | Metoda | URL | Middleware | Akcja |
 |--------|-----|-----------|-------|
-| `GET`  | `/rentals/new?equipment_id={id}` | Auth | Formularz wypozyczenia (kalendarz dat) |
-| `POST` | `/rentals` | Auth, CSRF | Utworzenie wypozyczenia (transakcja) |
-| `GET`  | `/rentals/mine` | Auth | Moje wypozyczenia |
-| `POST` | `/rentals/{id}/return` | Auth, CSRF | Zgloszenie / oznaczenie zwrotu |
+| `GET`  | `/rentals/new?equipment_id={id}` | Auth | Formularz wypożyczenia (kalendarz dat) |
+| `POST` | `/rentals` | Auth, CSRF | Utworzenie wypożyczenia (transakcja) |
+| `GET`  | `/rentals/mine` | Auth | Moje wypożyczenia |
+| `POST` | `/rentals/{id}/return` | Auth, CSRF | Zgłoszenie / oznaczenie zwrotu |
 
 ### Panel administratora (tylko admin)
 
 | Metoda | URL | Middleware | Akcja |
 |--------|-----|-----------|-------|
-| `GET`  | `/admin/users` | Admin | Lista uzytkownikow |
-| `POST` | `/admin/users/{id}/role` | Admin, CSRF | Zmiana roli uzytkownika |
-| `POST` | `/admin/users/{id}/delete` | Admin, CSRF | Usuniecie uzytkownika |
-| `GET`  | `/admin/equipment` | Admin | Zarzadzanie sprzetem |
-| `GET`  | `/admin/equipment/new` | Admin | Formularz dodawania sprzetu |
-| `POST` | `/admin/equipment` | Admin, CSRF | Dodanie sprzetu |
-| `GET`  | `/admin/equipment/{id}/edit` | Admin | Formularz edycji sprzetu |
-| `POST` | `/admin/equipment/{id}` | Admin, CSRF | Aktualizacja sprzetu |
-| `POST` | `/admin/equipment/{id}/delete` | Admin, CSRF | Usuniecie sprzetu |
-| `POST` | `/admin/equipment/{id}/images` | Admin, CSRF | Upload zdjecia sprzetu |
+| `GET`  | `/admin/users` | Admin | Lista użytkowników |
+| `POST` | `/admin/users/{id}/role` | Admin, CSRF | Zmiana roli użytkownika |
+| `POST` | `/admin/users/{id}/delete` | Admin, CSRF | Usunięcie użytkownika |
+| `GET`  | `/admin/equipment` | Admin | Zarządzanie sprzętem |
+| `GET`  | `/admin/equipment/new` | Admin | Formularz dodawania sprzętu |
+| `POST` | `/admin/equipment` | Admin, CSRF | Dodanie sprzętu |
+| `GET`  | `/admin/equipment/{id}/edit` | Admin | Formularz edycji sprzętu |
+| `POST` | `/admin/equipment/{id}` | Admin, CSRF | Aktualizacja sprzętu |
+| `POST` | `/admin/equipment/{id}/delete` | Admin, CSRF | Usunięcie sprzętu |
+| `POST` | `/admin/equipment/{id}/images` | Admin, CSRF | Wgranie zdjęcia sprzętu |
 
 ### Panel personelu (admin lub pracownik)
 
 | Metoda | URL | Middleware | Akcja |
 |--------|-----|-----------|-------|
-| `GET`  | `/admin/rentals` | Admin/Pracownik | Wszystkie wypozyczenia |
+| `GET`  | `/admin/rentals` | Admin/Pracownik | Wszystkie wypożyczenia |
 
 ### Kody odpowiedzi HTTP
 
@@ -322,23 +323,23 @@ Wszystkie zadania modyfikujace stan (`POST`) przechodza przez **globalny
 |-----|-------|
 | `200` | Sukces |
 | `302` | Przekierowanie (po logowaniu, akcji, braku sesji) |
-| `401` | Bledne dane logowania |
-| `403` | Brak uprawnien / niepoprawny token CSRF |
-| `404` | Nieznana trasa lub nieistniejacy zasob |
-| `405` | Metoda niedozwolona dla istniejacej sciezki |
-| `422` | Bledy walidacji formularza |
-| `429` | Zbyt wiele prob logowania (rate limiting) |
-| `500` | Nieobsluzony wyjatek serwera |
+| `401` | Błędne dane logowania |
+| `403` | Brak uprawnień / niepoprawny token CSRF |
+| `404` | Nieznana trasa lub nieistniejący zasób |
+| `405` | Metoda niedozwolona dla istniejącej ścieżki |
+| `422` | Błędy walidacji formularza |
+| `429` | Zbyt wiele prób logowania (rate limiting) |
+| `500` | Nieobsłużony wyjątek serwera |
 
 ---
 
 ## Flow aplikacji
 
-### Przeplyw wypozyczenia
+### Przepływ wypożyczenia
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                       PRZEPLYW WYPOZYCZENIA                         │
+│                       PRZEPŁYW WYPOŻYCZENIA                         │
 └─────────────────────────────────────────────────────────────────────┘
 
   [KLIENT]                                   [PRACOWNIK / ADMIN]
@@ -346,12 +347,12 @@ Wszystkie zadania modyfikujace stan (`POST`) przechodza przez **globalny
   1. Przegląda katalog (/equipment)
      └─ Wyszukiwarka (Fetch API), filtr kategorii
 
-  2. Wchodzi w szczegoly (/equipment/{id})
-     └─ Klika "Wypozycz teraz"
+  2. Wchodzi w szczegóły (/equipment/{id})
+     └─ Klika „Wypożycz teraz"
 
   3. Wybiera termin w kalendarzu (/rentals/new)
      └─ klik daty od → klik daty do
-     └─ podglad liczby dni + szac. kosztu na zywo
+     └─ podgląd liczby dni + szac. kosztu na żywo
 
   4. Zatwierdza (POST /rentals)
      └─ transakcja SERIALIZABLE: blokada egzemplarza,
@@ -359,35 +360,35 @@ Wszystkie zadania modyfikujace stan (`POST`) przechodza przez **globalny
      └─ trigger zmniejsza available_quantity
      Status: [NOWE]
 
-  5. Odbiera sprzet                          5. Widzi wypozyczenie w
+  5. Odbiera sprzęt                          5. Widzi wypożyczenie w
                                                 /admin/rentals
 
-  6. Klika "Zwroc" na /rentals/mine
-     └─ transakcja: przywrocenie ilosci      6. Moze tez oznaczyc zwrot
-     Status: [ZAKONCZONE]                        z panelu personelu
+  6. Klika „Zwróć" na /rentals/mine
+     └─ transakcja: przywrócenie ilości      6. Może też oznaczyć zwrot
+     Status: [ZAKOŃCZONE]                        z panelu personelu
 ```
 
-### Statusy wypozyczenia
+### Statusy wypożyczenia
 
 Zdefiniowane w `rentals.status` (ograniczenie `CHECK`) i w modelu `Rental`:
 
 | Status | Znaczenie |
 |---|---|
-| `nowe` | Wypozyczenie utworzone (stan poczatkowy) |
-| `aktywne` | Sprzet wydany klientowi |
-| `zakonczone` | Sprzet zwrocony (przywraca dostepnosc) |
-| `anulowane` | Wypozyczenie anulowane |
+| `nowe` | Wypożyczenie utworzone (stan początkowy) |
+| `aktywne` | Sprzęt wydany klientowi |
+| `zakonczone` | Sprzęt zwrócony (przywraca dostępność) |
+| `anulowane` | Wypożyczenie anulowane |
 
-> Zaimplementowany przeplyw: `nowe` → (zwrot) → `zakonczone`. Pozostale statusy
-> sa dostepne w modelu i schemacie bazy.
+> Zaimplementowany przepływ: `nowe` → (zwrot) → `zakonczone`. Pozostałe statusy
+> są dostępne w modelu i schemacie bazy.
 
 ### Autoryzacja i middleware
 
 ```
-  Zadanie HTTP
+  Żądanie HTTP
        │
        ▼
-  ┌──────────────┐   POST + zly token   ┌───────────┐
+  ┌──────────────┐   POST + zły token   ┌───────────┐
   │ CsrfMiddleware├─────────────────────►│  403      │
   │  (globalny)  │                      └───────────┘
   └──────┬───────┘
@@ -398,7 +399,7 @@ Zdefiniowane w `rentals.status` (ograniczenie `CHECK`) i w modelu `Rental`:
   └──────┬───────┘                      └─────────────────┘
          │ sesja OK
          ▼
-  ┌──────────────┐    zla rola          ┌───────────┐
+  ┌──────────────┐    zła rola          ┌───────────┐
   │ RoleMiddleware├─────────────────────►│  403      │
   └──────┬───────┘                      └───────────┘
          │ rola OK
@@ -414,9 +415,9 @@ Zdefiniowane w `rentals.status` (ograniczenie `CHECK`) i w modelu `Rental`:
 
 ![Diagram ERD](docs/erd.svg)
 
-Zrodlo edytowalne: [`docs/erd.drawio`](docs/erd.drawio) · opis tekstowy: [`docs/erd.md`](docs/erd.md).
+Źródło edytowalne: [`docs/erd.drawio`](docs/erd.drawio) · opis tekstowy: [`docs/erd.md`](docs/erd.md).
 
-### Relacje miedzy tabelami
+### Relacje między tabelami
 
 ```
 users (1) ───── (1) user_profiles          ← jeden-do-jednego
@@ -424,7 +425,7 @@ users (1) ───── (1) user_profiles          ← jeden-do-jednego
   │ (1:N)
   ▼
 rentals (1) ──── (N) rental_items (N) ──── (1) equipment ──── (N:1) categories
-                  [tabela laczaca M:N            │
+                  [tabela łącząca M:N            │
                    z atrybutami quantity,        │ (1:N)
                    daily_rate]                   ▼
                                            equipment_images
@@ -436,14 +437,14 @@ login_attempts   ← audyt + rate limiting (bez kluczy obcych)
 
 | Tabela | Opis | Klucze |
 |---|---|---|
-| `users` | Konta uzytkownikow | PK: id, UNIQUE: email |
+| `users` | Konta użytkowników | PK: id, UNIQUE: email |
 | `user_profiles` | Profil (telefon, adres) – relacja 1:1 | PK/FK: user_id |
-| `categories` | Kategorie sprzetu | PK: id, UNIQUE: name |
-| `equipment` | Sprzet do wypozyczenia | PK: id, FK: category_id |
-| `equipment_images` | Zdjecia sprzetu (1:N) | PK: id, FK: equipment_id |
-| `rentals` | Naglowek wypozyczenia | PK: id, FK: user_id |
-| `rental_items` | Pozycje wypozyczenia (M:N) | PK: (rental_id, equipment_id) |
-| `login_attempts` | Audyt prob logowania (rate limiting) | PK: id |
+| `categories` | Kategorie sprzętu | PK: id, UNIQUE: name |
+| `equipment` | Sprzęt do wypożyczenia | PK: id, FK: category_id |
+| `equipment_images` | Zdjęcia sprzętu (1:N) | PK: id, FK: equipment_id |
+| `rentals` | Nagłówek wypożyczenia | PK: id, FK: user_id |
+| `rental_items` | Pozycje wypożyczenia (M:N) | PK: (rental_id, equipment_id) |
+| `login_attempts` | Audyt prób logowania (rate limiting) | PK: id |
 
 ### Akcje na kluczach obcych
 
@@ -457,8 +458,8 @@ login_attempts   ← audyt + rate limiting (bez kluczy obcych)
 | `rental_items` | equipment_id → equipment | CASCADE | RESTRICT |
 
 Baza jest w **3NF** – brak redundancji oraz anomalii modyfikacji/usuwania.
-Stawka `rental_items.daily_rate` jest kopiowana w momencie wypozyczenia
-(odzwierciedla cene z chwili transakcji, a nie aktualna), wiec nie jest redundancja.
+Stawka `rental_items.daily_rate` jest kopiowana w momencie wypożyczenia
+(odzwierciedla cenę z chwili transakcji, a nie aktualną), więc nie jest redundancją.
 
 ---
 
@@ -466,29 +467,29 @@ Stawka `rental_items.daily_rate` jest kopiowana w momencie wypozyczenia
 
 ### Widoki (2)
 
-**`v_active_rentals`** – aktywne wypozyczenia z danymi klienta i sprzetu
+**`v_active_rentals`** – aktywne wypożyczenia z danymi klienta i sprzętu
 (JOIN po 4 tabelach: `rentals` + `users` + `rental_items` + `equipment` + `categories`).
 Filtruje statusy `nowe` i `aktywne`.
 
-**`v_popular_equipment`** – ranking popularnosci sprzetu (JOIN + `LEFT JOIN` +
-`GROUP BY`): liczba wypozyczen i suma wypozyczonych sztuk per egzemplarz.
+**`v_popular_equipment`** – ranking popularności sprzętu (JOIN + `LEFT JOIN` +
+`GROUP BY`): liczba wypożyczeń i suma wypożyczonych sztuk per egzemplarz.
 
 ### Wyzwalacz (1)
 
-**`rental_items_after_insert`** (funkcja `trg_decrement_available`) – po kazdym
+**`rental_items_after_insert`** (funkcja `trg_decrement_available`) – po każdym
 `INSERT` do `rental_items` automatycznie zmniejsza `equipment.available_quantity`
-i przerywa transakcje wyjatkiem, gdy dostepnosc spadlaby ponizej zera.
+i przerywa transakcję wyjątkiem, gdy dostępność spadłaby poniżej zera.
 
 ### Funkcja (1)
 
 **`fn_calculate_rental_cost(p_equipment_id, p_quantity, p_days) → NUMERIC(10,2)`**
-– oblicza koszt wypozyczenia (stawka dzienna × ilosc × liczba dni),
-z walidacja parametrow.
+– oblicza koszt wypożyczenia (stawka dzienna × ilość × liczba dni),
+z walidacją parametrów.
 
 ### Transakcja
 
-Tworzenie wypozyczenia (`RentalService::rent`) na poziomie izolacji
-**SERIALIZABLE** – zapobiega podwojnemu wypozyczeniu tego samego egzemplarza:
+Tworzenie wypożyczenia (`RentalService::rent`) na poziomie izolacji
+**SERIALIZABLE** – zapobiega podwójnemu wypożyczeniu tego samego egzemplarza:
 
 ```php
 $pdo->exec('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE');
@@ -500,17 +501,18 @@ $pdo->commit();
 // rollback w catch
 ```
 
-Zwrot sprzetu (`RentalService::returnRental`) rowniez dziala w transakcji
-(przywraca ilosci i ustawia status `zakonczone`).
+Zwrot sprzętu (`RentalService::returnRental`) również działa w transakcji
+(przywraca ilości i ustawia status `zakonczone`). Serwis waliduje także daty
+po stronie serwera (format, brak dat z przeszłości, maks. 30 dni).
 
 ---
 
-## Bezpieczenstwo – Security Bingo
+## Bezpieczeństwo – Security Bingo
 
-Aplikacja realizuje **24 z 25** punktow "Security Bingo". Jedyny celowo
-**niezaimplementowany** punkt to **E1 (wymuszenie HTTPS)** – aplikacja dziala
-lokalnie po HTTP, a obsluga flagi `Secure` na cookie jest przygotowana i
-wlaczana zmienna `SESSION_SECURE=true`.
+Aplikacja realizuje **24 z 25** punktów „Security Bingo". Jedyny celowo
+**niezaimplementowany** punkt to **E1 (wymuszenie HTTPS)** – aplikacja działa
+lokalnie po HTTP, a obsługa flagi `Secure` na cookie jest przygotowana i
+włączana zmienną `SESSION_SECURE=true`.
 
 ### Zaimplementowane zabezpieczenia
 
@@ -518,32 +520,32 @@ wlaczana zmienna `SESSION_SECURE=true`.
 |---|---|---|
 | **SQL Injection** | Prepared statements (PDO) | wszystkie repozytoria |
 | **XSS** | Escaping outputu | `htmlspecialchars(..., ENT_QUOTES)` w widokach |
-| **CSRF** | Token w kazdym formularzu | `Csrf` + globalny `CsrfMiddleware`, `hash_equals()` |
+| **CSRF** | Token w każdym formularzu | `Csrf` + globalny `CsrfMiddleware`, `hash_equals()` |
 | **Autentykacja** | Bcrypt | `password_hash()` / `password_verify()` |
-| **Sesja** | Regeneracja ID po loginie | `session_regenerate_id(true)` |
+| **Sesja** | Regeneracja ID po logowaniu | `session_regenerate_id(true)` |
 | **Cookies** | HttpOnly + SameSite=Lax (+ Secure opcjonalnie) | `Session::start()` |
 | **Autoryzacja** | Role admin / pracownik / klient | `RoleMiddleware` |
-| **Rate limiting** | Blokada po 5 probach / 15 min | `LoginThrottle` + tabela `login_attempts` |
-| **Hasla** | Nigdy nie logowane | audyt loguje email + IP, nie haslo |
-| **Bledy** | Brak stack trace na produkcji | `ErrorHandler` + `APP_DEBUG` |
-| **Generic errors** | Nie ujawnia czy email istnieje | jednakowy komunikat logowania |
-| **Walidacja** | Server-side na wejsciach | `AuthService`, `filter_var`, limity dlugosci |
+| **Rate limiting** | Blokada po 5 próbach / 15 min | `LoginThrottle` + tabela `login_attempts` |
+| **Hasła** | Nigdy nie logowane | audyt loguje e-mail + IP, nie hasło |
+| **Błędy** | Brak stack trace na produkcji | `ErrorHandler` + `APP_DEBUG` |
+| **Generic errors** | Nie ujawnia, czy e-mail istnieje | jednakowy komunikat logowania |
+| **Walidacja** | Server-side na wejściach | `AuthService`, `RentalService`, `filter_var`, limity długości |
 
 ### Plansza Security Bingo (24/25)
 
-Legenda: ✅ zaimplementowane · ❌ celowo pominiete (HTTPS).
+Legenda: ✅ zaimplementowane · ❌ celowo pominięte (HTTPS).
 
 |   | A | B | C | D | E |
 |:-:|---|---|---|---|---|
-| **1** | ✅ **A1**<br>Ochrona przed SQL injection (prepared statements / brak konkatenacji SQL) | ✅ **B1**<br>Nie zdradzam, czy email istnieje – komunikat „Email lub haslo niepoprawne" | ✅ **C1**<br>Walidacja formatu email po stronie serwera | ✅ **D1**<br>UserRepository zarzadzany jako singleton | ❌ **E1**<br>Logowanie i rejestracja tylko przez HTTPS |
-| **2** | ✅ **A2**<br>login/register przyjmuje dane tylko na POST, GET renderuje widok | ✅ **B2**<br>CSRF token w formularzu logowania | ✅ **C2**<br>CSRF token w formularzu rejestracji | ✅ **D2**<br>Ograniczam dlugosc wejscia (email, haslo, imie…) | ✅ **E2**<br>Hasla przechowywane jako hash (bcrypt, `password_hash`) |
-| **3** | ✅ **A3**<br>Hasla nigdy nie sa logowane w logach / errorach | ✅ **B3**<br>Po poprawnym logowaniu regeneruje ID sesji | ✅ **C3**<br>Cookie sesyjne ma flage `HttpOnly` | ✅ **D3**<br>Cookie sesyjne ma flage `Secure` | ✅ **E3**<br>Cookie ma ustawione `SameSite` (Lax) |
-| **4** | ✅ **A4**<br>Limit prob logowania / blokada czasowa po wielu probach | ✅ **B4**<br>Waliduje zlozonosc hasla (min. dlugosc itd.) | ✅ **C4**<br>Przy rejestracji sprawdzam, czy email jest juz w bazie | ✅ **D4**<br>Dane w widokach sa escapowane (ochrona przed XSS) | ✅ **E4**<br>W produkcji nie pokazuje stack trace / surowych bledow |
-| **5** | ✅ **A5**<br>Zwracam sensowne kody HTTP (400/401/403 przy bledach) | ✅ **B5**<br>Haslo nie jest przekazywane do widokow ani `echo`/`var_dump` | ✅ **C5**<br>Z bazy pobieram tylko minimalny zestaw danych o uzytkowniku | ✅ **D5**<br>Mam poprawne wylogowanie – niszcze sesje uzytkownika | ✅ **E5**<br>Loguje nieudane proby logowania (bez hasel) do audytu |
+| **1** | ✅ **A1**<br>Ochrona przed SQL injection (prepared statements / brak konkatenacji SQL) | ✅ **B1**<br>Nie zdradzam, czy e-mail istnieje – komunikat „E-mail lub hasło niepoprawne" | ✅ **C1**<br>Walidacja formatu e-mail po stronie serwera | ✅ **D1**<br>UserRepository zarządzany jako singleton | ❌ **E1**<br>Logowanie i rejestracja tylko przez HTTPS |
+| **2** | ✅ **A2**<br>login/register przyjmuje dane tylko na POST, GET renderuje widok | ✅ **B2**<br>CSRF token w formularzu logowania | ✅ **C2**<br>CSRF token w formularzu rejestracji | ✅ **D2**<br>Ograniczam długość wejścia (e-mail, hasło, imię…) | ✅ **E2**<br>Hasła przechowywane jako hash (bcrypt, `password_hash`) |
+| **3** | ✅ **A3**<br>Hasła nigdy nie są logowane w logach / błędach | ✅ **B3**<br>Po poprawnym logowaniu regeneruję ID sesji | ✅ **C3**<br>Cookie sesyjne ma flagę `HttpOnly` | ✅ **D3**<br>Cookie sesyjne ma flagę `Secure` | ✅ **E3**<br>Cookie ma ustawione `SameSite` (Lax) |
+| **4** | ✅ **A4**<br>Limit prób logowania / blokada czasowa po wielu próbach | ✅ **B4**<br>Waliduję złożoność hasła (min. długość itd.) | ✅ **C4**<br>Przy rejestracji sprawdzam, czy e-mail jest już w bazie | ✅ **D4**<br>Dane w widokach są escapowane (ochrona przed XSS) | ✅ **E4**<br>W produkcji nie pokazuję stack trace / surowych błędów |
+| **5** | ✅ **A5**<br>Zwracam sensowne kody HTTP (400/401/403 przy błędach) | ✅ **B5**<br>Hasło nie jest przekazywane do widoków ani `echo`/`var_dump` | ✅ **C5**<br>Z bazy pobieram tylko minimalny zestaw danych o użytkowniku | ✅ **D5**<br>Mam poprawne wylogowanie – niszczę sesję użytkownika | ✅ **E5**<br>Loguję nieudane próby logowania (bez haseł) do audytu |
 
-> **E1 (HTTPS)** jest jedynym celowo pominietym polem – aplikacja dziala lokalnie
-> po HTTP. Obsluga flagi `Secure` na cookie jest jednak przygotowana w kodzie
-> (`Session::start()`) i wlaczana zmienna `SESSION_SECURE=true`.
+> **E1 (HTTPS)** jest jedynym celowo pominiętym polem – aplikacja działa lokalnie
+> po HTTP. Obsługa flagi `Secure` na cookie jest jednak przygotowana w kodzie
+> (`Session::start()`) i włączana zmienną `SESSION_SECURE=true`.
 
 ---
 
@@ -557,26 +559,26 @@ tryb jasny i ciemny.
 | Tryb jasny | Tryb ciemny |
 |---|---|
 | ![Katalog jasny](docs/screenshots/catalog.png) | ![Katalog ciemny](docs/screenshots/catalog-dark.png) |
-| ![Szczegoly jasny](docs/screenshots/equipment-detail.png) | ![Szczegoly ciemny](docs/screenshots/equipment-detail-dark.png) |
+| ![Szczegóły jasny](docs/screenshots/equipment-detail.png) | ![Szczegóły ciemny](docs/screenshots/equipment-detail-dark.png) |
 | ![Kalendarz jasny](docs/screenshots/rental-calendar.png) | ![Kalendarz ciemny](docs/screenshots/rental-calendar-dark.png) |
 
-### Wersja mobilna (responsywny uklad jednokolumnowy)
+### Wersja mobilna (responsywny układ jednokolumnowy)
 
-| Strona glowna | Katalog (ciemny) |
+| Strona główna | Katalog (ciemny) |
 |---|---|
 | ![Mobile home](docs/screenshots/mobile-home.png) | ![Mobile katalog](docs/screenshots/mobile-catalog-dark.png) |
 
-### Katalog sprzetu (`views/equipment/index.php`)
+### Katalog sprzętu (`views/equipment/index.php`)
 
-Siatka kart sprzetu (CSS Grid) z wyszukiwarka odswiezana przez Fetch API.
+Siatka kart sprzętu (CSS Grid) z wyszukiwarką odświeżaną przez Fetch API.
 
 ```php
 <article class="equipment-card">
     <h3><?= htmlspecialchars($eq->name, ENT_QUOTES) ?></h3>
     <p class="cat"><?= htmlspecialchars($eq->categoryName ?? '', ENT_QUOTES) ?></p>
-    <p class="rate"><?= number_format($eq->dailyRate, 2) ?> zl / dzien</p>
-    <p class="stock">Dostepne: <?= $eq->availableQuantity ?> / <?= $eq->totalQuantity ?></p>
-    <a href="/equipment/<?= (int) $eq->id ?>" class="btn-sm">Szczegoly</a>
+    <p class="rate"><?= number_format($eq->dailyRate, 2) ?> zł / dzień</p>
+    <p class="stock">Dostępne: <?= $eq->availableQuantity ?> / <?= $eq->totalQuantity ?></p>
+    <a href="/equipment/<?= (int) $eq->id ?>" class="btn-sm">Szczegóły</a>
 </article>
 ```
 
@@ -593,17 +595,17 @@ fetch('/api/equipment?' + params.toString(), { headers: { 'Accept': 'application
 ```php
 <form method="post" action="/login">
     <?= App\Core\Csrf::field() ?>
-    <label>Email<input type="email" name="email" required maxlength="150"></label>
-    <label>Haslo<input type="password" name="password" required></label>
-    <button type="submit" class="btn">Zaloguj</button>
+    <label>Adres e-mail<input type="email" name="email" required maxlength="150" autocomplete="email"></label>
+    <label>Hasło<input type="password" name="password" required autocomplete="current-password"></label>
+    <button type="submit" class="btn">Zaloguj się</button>
 </form>
 ```
 
 ### Kalendarz wyboru dat (`views/rentals/new.php` + `public/js/calendar.js`)
 
-Interaktywny kalendarz (vanilla JS) z wyborem zakresu, blokada dat przeszlych
-oraz podgladem liczby dni i szacowanego kosztu. Wpisuje wartosci do natywnych
-pol `type="date"` (fallback bez JS – progresywne ulepszanie).
+Interaktywny kalendarz (vanilla JS) z wyborem zakresu, blokadą dat przeszłych
+oraz podglądem liczby dni i szacowanego kosztu. Wpisuje wartości do natywnych
+pól `type="date"` (fallback bez JS – progresywne ulepszanie).
 
 ```php
 <div id="rental-calendar" class="calendar" data-rate="<?= $eq->dailyRate ?>"></div>
@@ -613,7 +615,7 @@ pol `type="date"` (fallback bez JS – progresywne ulepszanie).
 
 ### Tryb jasny / ciemny (`public/css/style.css` + `public/js/theme.js`)
 
-Motyw sterowany atrybutem `data-theme` na `<html>`, zapamietywany w
+Motyw sterowany atrybutem `data-theme` na `<html>`, zapamiętywany w
 `localStorage`, respektuje `prefers-color-scheme`. Skrypt anty-FOUC w `<head>`
 ustawia motyw przed renderem.
 
@@ -622,7 +624,7 @@ ustawia motyw przed renderem.
 [data-theme="dark"] { --primary: #2f9e6b; --bg: #0b1410; --surface: #10201a; /* ... */ }
 ```
 
-### Responsywnosc – CSS media queries
+### Responsywność – CSS media queries
 
 ```css
 .equipment-grid {
@@ -641,9 +643,59 @@ ustawia motyw przed renderem.
 
 ---
 
-## Uruchamianie testow
+## Scenariusz testowy
 
-### Testy jednostkowe (PHPUnit) – 11 testow, 18 asercji
+Krok po kroku – do ręcznej weryfikacji wszystkich wymagań:
+
+1. **Uruchomienie:** `cp .env.example .env`, następnie `docker compose up -d --build`.
+   Otwórz `http://localhost:8080` → strona główna (hero).
+2. **Rejestracja:** wejdź w **Zarejestruj się**, podaj dane z hasłem krótszym niż
+   8 znaków → lista błędów walidacji (422). Popraw dane → komunikat
+   „Konto utworzone, możesz się zalogować".
+3. **Logowanie – błędne dane:** zaloguj się złym hasłem → kod **401**, generyczny
+   komunikat „E-mail lub hasło jest niepoprawne" (nie zdradza, czy konto istnieje).
+4. **Rate limiting:** powtórz błędne logowanie 5 razy → kolejna próba zwraca
+   **429** i komunikat o zbyt wielu próbach. Sprawdź audyt:
+   `SELECT * FROM login_attempts;` (e-mail + IP, bez haseł).
+5. **Logowanie klienta:** `klient@wpro.pl` / `klient123` → przekierowanie na
+   stronę główną, w nagłówku imię i nazwisko (sesja).
+6. **Wypożyczenie:** **Katalog** → wpisz „wiertarka" (lista odświeża się przez
+   Fetch API, bez przeładowania) → **Szczegóły** → **Wypożycz teraz** → wybierz
+   zakres dat w kalendarzu (daty przeszłe są zablokowane, koszt liczy się na
+   żywo) → **Wypożycz** → wpis w „Moje wypożyczenia" ze statusem „Nowe".
+   W bazie trigger zmniejszył `available_quantity` (sprawdź w katalogu).
+7. **Zwrot:** w „Moje wypożyczenia" kliknij **Zwróć** → status „Zakończone",
+   dostępność sprzętu wraca do pełnej.
+8. **Kontrola uprawnień (403):** będąc zalogowanym jako klient, wejdź ręcznie na
+   `http://localhost:8080/admin/users` → strona błędu **403** (RoleMiddleware).
+9. **Brak sesji (302):** wyloguj się i wejdź na `/admin/users` → przekierowanie
+   na `/login` (AuthMiddleware).
+10. **CSRF (403):** wyślij `POST /login` bez tokenu (np. `curl -X POST -d
+    "email=a@b.pl&password=x" http://localhost:8080/login`) → **403**.
+11. **Panel pracownika:** zaloguj się jako `pracownik@wpro.pl` → zakładka
+    **Wypożyczenia** (wszystkie wypożyczenia, oznaczanie zwrotów). Zakładki
+    **Użytkownicy**/**Sprzęt** są niedostępne (403 przy wejściu ręcznym).
+12. **Panel admina – CRUD:** zaloguj się jako `admin@wpro.pl` → **Sprzęt** →
+    dodaj nowy sprzęt → edytuj go → wgraj zdjęcie → usuń. **Użytkownicy** →
+    zmień rolę użytkownika → usuń konto testowe.
+13. **Strony błędów:** `/equipment/999999` → **404**; `GET` na trasę POST
+    (np. `/rentals`) → **405**.
+14. **Widoki i funkcja bazy:**
+    ```sql
+    SELECT * FROM v_active_rentals;
+    SELECT * FROM v_popular_equipment LIMIT 5;
+    SELECT fn_calculate_rental_cost(1, 2, 3);  -- 25 zł × 2 szt. × 3 dni = 150.00
+    ```
+15. **Wyzwalacz:** w transakcji wstaw pozycję wypożyczenia i obserwuj spadek
+    `available_quantity`; wycofaj (`ROLLBACK`) i sprawdź powrót wartości.
+16. **Tryb ciemny / responsywność:** przełącz motyw ikoną w nagłówku (wybór
+    przetrwa odświeżenie); zwęź okno < 768 px → układ jednokolumnowy.
+
+---
+
+## Uruchamianie testów
+
+### Testy jednostkowe (PHPUnit) – 11 testów, 18 asercji
 
 ```bash
 docker compose exec php composer install      # raz
@@ -651,10 +703,10 @@ docker compose exec php vendor/bin/phpunit --testdox
 ```
 
 Pokryte testy:
-- `UserModelTest` – mapowanie wierszy, role, pelne imie
-- `AuthServiceTest` – walidacja danych, weryfikacja hasla (mock `UserRepository`)
+- `UserModelTest` – mapowanie wierszy, role, pełne imię
+- `AuthServiceTest` – walidacja danych, weryfikacja hasła (mock `UserRepository`)
 - `LoginThrottleTest` – progi blokady, czyszczenie po sukcesie (mock repo)
-- `CsrfTest` – stabilnosc i weryfikacja tokenu
+- `CsrfTest` – stabilność i weryfikacja tokenu
 
 ### Testy integracyjne (Bash + curl)
 
@@ -662,31 +714,32 @@ Pokryte testy:
 bash tests/integration/smoke.sh
 ```
 
-Sprawdzaja m.in.:
-- dostepnosc tras publicznych (`/`, `/login`, `/register`, `/equipment`) → 200
-- nieistniejacy zasob (`/equipment/999999`) → 404
-- ochrona panelu admina bez logowania → 302 na `/login`
+Sprawdzają m.in.:
+- dostępność tras publicznych (`/`, `/login`, `/register`, `/equipment`) → 200
+- nieistniejący zasób (`/equipment/999999`) → 404
+- ochronę panelu admina bez logowania → 302 na `/login`
 - odrzucenie `POST /login` bez tokenu CSRF → 403
 
 ---
 
-## Checklist wymagan
+## Checklista wymagań
 
-### Funkcjonalnosc
+### Funkcjonalność
 
-- [x] Rejestracja uzytkownika z walidacja
-- [x] Logowanie / wylogowanie z sesja
-- [x] Uprawnienia uzytkownikow (admin / pracownik / klient) weryfikowane w trakcie dzialania
-- [x] Zarzadzanie uzytkownikami (zmiana roli, usuwanie)
-- [x] Katalog sprzetu z wyszukiwaniem (Fetch API) i filtrem kategorii
-- [x] Szczegoly sprzetu + podobny sprzet
-- [x] Wypozyczanie sprzetu z kalendarzem wyboru dat
-- [x] Historia "Moje wypozyczenia" + zgloszenie zwrotu
-- [x] Panel personelu: wszystkie wypozyczenia, oznaczanie zwrotow
-- [x] Panel admina: CRUD sprzetu + upload zdjec
+- [x] Rejestracja użytkownika z walidacją
+- [x] Logowanie / wylogowanie z sesją
+- [x] Uprawnienia użytkowników (admin / pracownik / klient) weryfikowane w trakcie działania
+- [x] Zarządzanie użytkownikami (zmiana roli, usuwanie)
+- [x] Katalog sprzętu z wyszukiwaniem (Fetch API) i filtrem kategorii
+- [x] Szczegóły sprzętu + podobny sprzęt
+- [x] Wypożyczanie sprzętu z kalendarzem wyboru dat (walidacja dat po stronie serwera)
+- [x] Historia „Moje wypożyczenia" + zgłoszenie zwrotu
+- [x] Panel personelu: wszystkie wypożyczenia, oznaczanie zwrotów
+- [x] Panel admina: CRUD sprzętu + wgrywanie zdjęć
 - [x] Tryb jasny / ciemny
 - [x] Responsywny design (CSS media queries)
-- [x] Strony bledow: 400, 403, 404, 405, 500
+- [x] Strony błędów: 400, 403, 404, 405, 500
+- [x] Cały interfejs w języku polskim (z polskimi znakami)
 
 ### Baza danych
 
@@ -699,19 +752,19 @@ Sprawdzaja m.in.:
 - [x] Transakcja na poziomie izolacji `SERIALIZABLE`
 - [x] Klucze obce z akcjami `ON DELETE CASCADE / RESTRICT`
 - [x] 3NF – brak redundancji i anomalii
-- [x] Eksport bazy do plikow SQL + dane przykladowe (seed)
+- [x] Eksport bazy do plików SQL + dane przykładowe (seed)
 
 ### Kod i architektura
 
-- [x] Architektura MVC + Service + Repository (wlasna, bez frameworka)
+- [x] Architektura MVC + Service + Repository (własna, bez frameworka)
 - [x] Zasady SOLID
 - [x] OOP: klasy abstrakcyjne, enkapsulacja, dziedziczenie, wzorzec Singleton, readonly DTO
-- [x] Composer + PSR-4 autoloading (+ wlasny autoloader fallback)
+- [x] Composer + PSR-4 autoloading (+ własny autoloader fallback)
 - [x] PHPUnit – testy jednostkowe (4 klasy testowe)
 - [x] Testy integracyjne (Bash + curl)
 - [x] Docker + docker-compose (Nginx + PHP-FPM + PostgreSQL)
 - [x] Fetch API (wyszukiwarka, kalendarz dat)
-- [x] Globalna obsluga bledow + dedykowane strony bledow
-- [x] Security Bingo: 24/25 punktow
-- [x] Dokumentacja: README, diagram ERD, diagram architektury, zrzuty ekranu
-- [x] Systematyczna historia commitow Git (rozwoj od marca do czerwca)
+- [x] Globalna obsługa błędów + dedykowane strony błędów
+- [x] Security Bingo: 24/25 punktów
+- [x] Dokumentacja: README, diagram ERD, diagram architektury, zrzuty ekranu, scenariusz testowy
+- [x] Systematyczna historia commitów Git (rozwój od marca do czerwca)
