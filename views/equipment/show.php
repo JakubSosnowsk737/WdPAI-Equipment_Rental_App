@@ -7,7 +7,7 @@ use App\Models\Equipment;
 $available = $eq->isAvailable();
 ob_start();
 ?>
-<p><a href="/equipment" class="back">&laquo; powrot do katalogu</a></p>
+<p><a href="/equipment" class="back">&laquo; powrót do katalogu</a></p>
 
 <article class="product">
     <div class="product-media">
@@ -29,7 +29,7 @@ ob_start();
                     <path d="M3.27 6.96 12 12.01l8.73-5.05"/>
                     <path d="M12 22.08V12"/>
                 </svg>
-                <span>Brak zdjecia</span>
+                <span>Brak zdjęcia</span>
             </div>
         <?php endif; ?>
     </div>
@@ -45,11 +45,11 @@ ob_start();
 
         <div class="price-box">
             <div class="price-wrap">
-                <span class="price"><?= number_format($eq->dailyRate, 2) ?> zl</span>
-                <span class="price-unit">/ dzien</span>
+                <span class="price"><?= number_format($eq->dailyRate, 2) ?> zł</span>
+                <span class="price-unit">/ dzień</span>
             </div>
             <span class="badge <?= $available ? 'badge-ok' : 'badge-no' ?>">
-                <?= $available ? 'Dostepny' : 'Niedostepny' ?>
+                <?= $available ? 'Dostępny' : 'Niedostępny' ?>
             </span>
         </div>
 
@@ -60,48 +60,48 @@ ob_start();
             </div>
             <div class="spec-row">
                 <dt>Stawka dzienna</dt>
-                <dd><?= number_format($eq->dailyRate, 2) ?> zl</dd>
+                <dd><?= number_format($eq->dailyRate, 2) ?> zł</dd>
             </div>
             <div class="spec-row">
-                <dt>Dostepnosc</dt>
+                <dt>Dostępność</dt>
                 <dd><?= $eq->availableQuantity ?> z <?= $eq->totalQuantity ?> szt.</dd>
             </div>
         </dl>
 
         <div class="product-actions">
             <?php if ($available && Session::isAuthenticated()): ?>
-                <a href="/rentals/new?equipment_id=<?= (int) $eq->id ?>" class="btn">Wypozycz teraz</a>
+                <a href="/rentals/new?equipment_id=<?= (int) $eq->id ?>" class="btn">Wypożycz teraz</a>
             <?php elseif (!Session::isAuthenticated()): ?>
-                <a href="/login" class="btn">Zaloguj sie, aby wypozyczyc</a>
+                <a href="/login" class="btn">Zaloguj się, aby wypożyczyć</a>
             <?php else: ?>
-                <span class="badge badge-no">Sprzet chwilowo niedostepny</span>
+                <span class="badge badge-no">Sprzęt chwilowo niedostępny</span>
             <?php endif; ?>
         </div>
     </div>
 </article>
 
 <section class="info-steps">
-    <h3>Jak wypozyczyc?</h3>
+    <h3>Jak wypożyczyć?</h3>
     <div class="steps">
         <div class="step">
             <span class="step-num">1</span>
             <div>
                 <strong>Wybierz termin</strong>
-                <p>Okresl date poczatku i konca wypozyczenia.</p>
+                <p>Określ datę początku i końca wypożyczenia.</p>
             </div>
         </div>
         <div class="step">
             <span class="step-num">2</span>
             <div>
                 <strong>Zarezerwuj online</strong>
-                <p>Potwierdz rezerwacje - system policzy koszt automatycznie.</p>
+                <p>Potwierdź rezerwację - system policzy koszt automatycznie.</p>
             </div>
         </div>
         <div class="step">
             <span class="step-num">3</span>
             <div>
-                <strong>Odbierz sprzet</strong>
-                <p>Po zakonczeniu po prostu go zwracasz w aplikacji.</p>
+                <strong>Odbierz sprzęt</strong>
+                <p>Po zakończeniu po prostu go zwracasz w aplikacji.</p>
             </div>
         </div>
     </div>
@@ -109,15 +109,15 @@ ob_start();
 
 <?php if (!empty($related)): ?>
     <section class="related">
-        <h3>Podobny sprzet</h3>
+        <h3>Podobny sprzęt</h3>
         <div class="equipment-grid">
             <?php /** @var Equipment[] $related */ foreach ($related as $r): ?>
                 <article class="equipment-card">
                     <h3><?= htmlspecialchars($r->name, ENT_QUOTES) ?></h3>
                     <p class="cat"><?= htmlspecialchars($r->categoryName ?? '', ENT_QUOTES) ?></p>
-                    <p class="rate"><?= number_format($r->dailyRate, 2) ?> zl / dzien</p>
-                    <p class="stock">Dostepne: <?= $r->availableQuantity ?> / <?= $r->totalQuantity ?></p>
-                    <a href="/equipment/<?= (int) $r->id ?>" class="btn-sm">Szczegoly</a>
+                    <p class="rate"><?= number_format($r->dailyRate, 2) ?> zł / dzień</p>
+                    <p class="stock">Dostępne: <?= $r->availableQuantity ?> / <?= $r->totalQuantity ?></p>
+                    <a href="/equipment/<?= (int) $r->id ?>" class="btn-sm">Szczegóły</a>
                 </article>
             <?php endforeach; ?>
         </div>

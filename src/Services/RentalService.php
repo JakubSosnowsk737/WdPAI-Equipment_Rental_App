@@ -22,10 +22,7 @@ final class RentalService
     ) {}
 
     /**
-     * @return array{ok:bool, rentalId?:int, error?:string}
-     */
-    /**
-     * Zwrot - przywraca ilosci sprzetu i zmienia status na 'zakonczone'.
+     * Zwrot - przywraca ilości sprzętu i zmienia status na 'zakonczone'.
      * @return array{ok:bool, error?:string}
      */
     public function returnRental(int $rentalId): array
@@ -35,10 +32,10 @@ final class RentalService
         try {
             $rental = $this->rentals->findById($rentalId);
             if ($rental === null) {
-                throw new RuntimeException('Wypozyczenie nie istnieje.');
+                throw new RuntimeException('Wypożyczenie nie istnieje.');
             }
             if ($rental->status === Rental::STATUS_FINISHED) {
-                throw new RuntimeException('Juz zakonczone.');
+                throw new RuntimeException('Wypożyczenie jest już zakończone.');
             }
 
             $items = $pdo->prepare('SELECT equipment_id, quantity FROM rental_items WHERE rental_id = :id');
@@ -60,13 +57,33 @@ final class RentalService
         }
     }
 
+    /** Maksymalny okres pojedynczego wypożyczenia (dni). */
+    private const MAX_DAYS = 30;
+
     public function rent(int $userId, int $equipmentId, int $quantity, string $startDate, string $endDate): array
     {
-        if ($startDate > $endDate) {
-            return ['ok' => false, 'error' => 'Data od musi byc <= data do.'];
-        }
         if ($quantity < 1) {
-            return ['ok' => false, 'error' => 'Ilosc musi byc dodatnia.'];
+            return ['ok' => false, 'error' => 'Ilość musi być dodatnia.'];
+        }
+
+        // Ścisła walidacja dat po stronie serwera (niezależna od JS/przeglądarki).
+        $start = \DateTimeImmutable::createFromFormat('!Y-m-d', $startDate);
+        $end   = \DateTimeImmutable::createFromFormat('!Y-m-d', $endDate);
+        $today = new \DateTimeImmutable('today');
+        if ($start === false || $end === false
+            || $start->format('Y-m-d') !== $startDate
+            || $end->format('Y-m-d') !== $endDate) {
+            return ['ok' => false, 'error' => 'Nieprawidłowy format daty.'];
+        }
+        if ($start < $today) {
+            return ['ok' => false, 'error' => 'Data początku nie może być w przeszłości.'];
+        }
+        if ($end < $start) {
+            return ['ok' => false, 'error' => 'Data końca musi być nie wcześniejsza niż data początku.'];
+        }
+        $days = $end->diff($start)->days + 1;
+        if ($days > self::MAX_DAYS) {
+            return ['ok' => false, 'error' => 'Maksymalny okres wypożyczenia to ' . self::MAX_DAYS . ' dni.'];
         }
 
         $pdo = Database::getInstance()->pdo();
@@ -77,14 +94,13 @@ final class RentalService
             $stmt->execute(['id' => $equipmentId]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$row) {
-                throw new RuntimeException('Sprzet nie istnieje.');
+                throw new RuntimeException('Sprzęt nie istnieje.');
             }
             if ((int) $row['available_quantity'] < $quantity) {
-                throw new RuntimeException('Niewystarczajaca ilosc.');
+                throw new RuntimeException('Niewystarczająca ilość dostępnego sprzętu.');
             }
             $rate = (float) $row['daily_rate'];
 
-            $days = (new \DateTimeImmutable($endDate))->diff(new \DateTimeImmutable($startDate))->days + 1;
             $cost = round($rate * $quantity * $days, 2);
 
             $rental = new Rental(

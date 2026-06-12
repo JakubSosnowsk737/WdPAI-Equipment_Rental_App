@@ -3,10 +3,10 @@ use App\Models\User;
 ob_start();
 ?>
 <section>
-    <h2>Zarzadzanie uzytkownikami</h2>
+    <h2>Zarządzanie użytkownikami</h2>
     <table class="data-table">
         <thead>
-        <tr><th>ID</th><th>Email</th><th>Imie i nazwisko</th><th>Rola</th><th>Akcje</th></tr>
+        <tr><th>ID</th><th>E-mail</th><th>Imię i nazwisko</th><th>Rola</th><th>Akcje</th></tr>
         </thead>
         <tbody>
         <?php /** @var User[] $users */ foreach ($users as $u): ?>
@@ -27,9 +27,9 @@ ob_start();
                 </td>
                 <td>
                     <form method="post" action="/admin/users/<?= (int) $u->id ?>/delete"
-                          onsubmit="return confirm('Usunac uzytkownika?')">
+                          onsubmit="return confirm('Usunąć użytkownika?')">
                         <?= App\Core\Csrf::field() ?>
-                        <button class="btn-sm btn-danger" type="submit">Usun</button>
+                        <button class="btn-sm btn-danger" type="submit">Usuń</button>
                     </form>
                 </td>
             </tr>
@@ -39,5 +39,5 @@ ob_start();
 </section>
 <?php
 $content = ob_get_clean();
-$title = 'Uzytkownicy';
+$title = 'Użytkownicy';
 require __DIR__ . '/../../layout.php';

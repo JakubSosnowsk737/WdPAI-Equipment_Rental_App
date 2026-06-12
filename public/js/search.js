@@ -11,7 +11,7 @@
 
     function render(items) {
         if (!items.length) {
-            grid.innerHTML = '<p>Brak wynikow.</p>';
+            grid.innerHTML = '<p>Brak wyników.</p>';
             return;
         }
         grid.innerHTML = items.map(eq => `
@@ -19,9 +19,9 @@
                 <h3>${escapeHtml(eq.name)}</h3>
                 <p class="cat">${escapeHtml(eq.category_name || '')}</p>
                 <p>${escapeHtml(eq.description || '')}</p>
-                <p class="rate">${Number(eq.daily_rate).toFixed(2)} zl / dzien</p>
-                <p class="stock">Dostepne: ${eq.available_quantity} / ${eq.total_quantity}</p>
-                <a href="/equipment/${eq.id}" class="btn-sm">Szczegoly</a>
+                <p class="rate">${Number(eq.daily_rate).toFixed(2)} zł / dzień</p>
+                <p class="stock">Dostępne: ${eq.available_quantity} / ${eq.total_quantity}</p>
+                <a href="/equipment/${eq.id}" class="btn-sm">Szczegóły</a>
             </article>
         `).join('');
     }
@@ -43,7 +43,7 @@
             .then(r => r.ok ? r.json() : Promise.reject(r.status))
             .then(data => render(data.items || []))
             .catch(err => {
-                grid.innerHTML = '<p class="error">Blad pobierania danych.</p>';
+                grid.innerHTML = '<p class="error">Błąd pobierania danych.</p>';
                 console.error(err);
             });
     }

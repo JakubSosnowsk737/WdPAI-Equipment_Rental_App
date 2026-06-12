@@ -9,7 +9,7 @@ $role = Session::userRole();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <title><?= htmlspecialchars($title ?? 'WypozyczalniaPRO', ENT_QUOTES) ?></title>
+    <title><?= htmlspecialchars($title ?? 'WypożyczalniaPRO', ENT_QUOTES) ?></title>
     <?php /* Ustawienie motywu przed renderem - eliminuje miganie (FOUC). */ ?>
     <script>
         (function () {
@@ -36,26 +36,26 @@ $role = Session::userRole();
                         <path d="M12 22.08V12"/>
                     </svg>
                 </span>
-                <span>Wypozyczalnia<span class="brand-accent">PRO</span></span>
+                <span>Wypożyczalnia<span class="brand-accent">PRO</span></span>
             </a>
 
             <nav class="nav">
                 <a href="/equipment">Katalog</a>
                 <?php if (Session::isAuthenticated()): ?>
-                    <a href="/rentals/mine">Moje wypozyczenia</a>
+                    <a href="/rentals/mine">Moje wypożyczenia</a>
                     <?php if ($role === 'admin'): ?>
-                        <a href="/admin/users">Uzytkownicy</a>
-                        <a href="/admin/equipment">Sprzet</a>
+                        <a href="/admin/users">Użytkownicy</a>
+                        <a href="/admin/equipment">Sprzęt</a>
                     <?php endif; ?>
                     <?php if (in_array($role, ['admin', 'pracownik'], true)): ?>
-                        <a href="/admin/rentals">Wypozyczenia</a>
+                        <a href="/admin/rentals">Wypożyczenia</a>
                     <?php endif; ?>
                 <?php endif; ?>
             </nav>
 
             <div class="header-actions">
                 <button id="themeToggle" class="theme-toggle" type="button"
-                        aria-label="Przelacz tryb jasny/ciemny" title="Przelacz motyw">
+                        aria-label="Przełącz tryb jasny/ciemny" title="Przełącz motyw">
                     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
@@ -89,7 +89,7 @@ $role = Session::userRole();
     </main>
 
     <footer class="site-footer">
-        &copy; <?= date('Y') ?> WypozyczalniaPRO &middot; system wypozyczania sprzetu
+        &copy; <?= date('Y') ?> WypożyczalniaPRO &middot; system wypożyczania sprzętu
     </footer>
 
     <script src="/js/theme.js" defer></script>

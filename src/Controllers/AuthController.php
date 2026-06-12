@@ -33,7 +33,7 @@ final class AuthController extends AbstractController
             $this->render('auth/register', ['errors' => $errors], 422);
             return;
         }
-        Session::flash('success', 'Konto utworzone, mozesz sie zalogowac.');
+        Session::flash('success', 'Konto utworzone, możesz się zalogować.');
         $this->redirect('/login');
     }
 
@@ -52,7 +52,7 @@ final class AuthController extends AbstractController
         // czy to blokada czy bledne haslo wobec konkretnego konta.
         if ($this->throttle->isLocked($email, $ip)) {
             $this->render('auth/login', [
-                'error' => 'Zbyt wiele prob logowania. Sprobuj ponownie za kilka minut.',
+                'error' => 'Zbyt wiele prób logowania. Spróbuj ponownie za kilka minut.',
             ], 429);
             return;
         }
@@ -60,8 +60,8 @@ final class AuthController extends AbstractController
         $user = $this->auth->verify($email, $password);
         if ($user === null) {
             $this->throttle->registerFailure($email, $ip);
-            // Generyczny komunikat - nie zdradzamy, czy email istnieje.
-            $this->render('auth/login', ['error' => 'Email lub haslo jest niepoprawne.'], 401);
+            // Generyczny komunikat - nie zdradzamy, czy e-mail istnieje.
+            $this->render('auth/login', ['error' => 'E-mail lub hasło jest niepoprawne.'], 401);
             return;
         }
 

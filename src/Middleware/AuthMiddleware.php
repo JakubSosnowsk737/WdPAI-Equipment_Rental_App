@@ -15,7 +15,7 @@ final class AuthMiddleware
     public function __invoke(Request $request): void
     {
         if (!Session::isAuthenticated()) {
-            Session::flash('error', 'Musisz sie zalogowac.');
+            Session::flash('error', 'Musisz się zalogować.');
             Response::redirect('/login');
         }
     }

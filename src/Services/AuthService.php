@@ -26,7 +26,7 @@ final class AuthService
         }
 
         if ($this->users->findByEmail($data['email']) !== null) {
-            return ['Uzytkownik o tym emailu juz istnieje.'];
+            return ['Użytkownik o tym adresie e-mail już istnieje.'];
         }
 
         $user = new User(
@@ -65,27 +65,27 @@ final class AuthService
 
         $email = (string) ($data['email'] ?? '');
         if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'Nieprawidlowy email.';
+            $errors[] = 'Nieprawidłowy adres e-mail.';
         } elseif (strlen($email) > self::MAX_EMAIL) {
-            $errors[] = 'Email jest zbyt dlugi (max ' . self::MAX_EMAIL . ' znakow).';
+            $errors[] = 'Adres e-mail jest zbyt długi (maks. ' . self::MAX_EMAIL . ' znaków).';
         }
 
         $password = (string) ($data['password'] ?? '');
         if (strlen($password) < self::MIN_PASSWORD) {
-            $errors[] = 'Haslo musi miec min. ' . self::MIN_PASSWORD . ' znakow.';
+            $errors[] = 'Hasło musi mieć min. ' . self::MIN_PASSWORD . ' znaków.';
         } elseif (strlen($password) > self::MAX_PASSWORD) {
-            $errors[] = 'Haslo jest zbyt dlugie.';
+            $errors[] = 'Hasło jest zbyt długie.';
         } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/\d/', $password)) {
-            // Walidacja zlozonosci - co najmniej jedna litera i jedna cyfra.
-            $errors[] = 'Haslo musi zawierac litere i cyfre.';
+            // Walidacja złożoności - co najmniej jedna litera i jedna cyfra.
+            $errors[] = 'Hasło musi zawierać literę i cyfrę.';
         }
 
         $firstName = (string) ($data['first_name'] ?? '');
         $lastName  = (string) ($data['last_name'] ?? '');
         if ($firstName === '' || $lastName === '') {
-            $errors[] = 'Imie i nazwisko sa wymagane.';
+            $errors[] = 'Imię i nazwisko są wymagane.';
         } elseif (strlen($firstName) > self::MAX_NAME || strlen($lastName) > self::MAX_NAME) {
-            $errors[] = 'Imie/nazwisko sa zbyt dlugie (max ' . self::MAX_NAME . ' znakow).';
+            $errors[] = 'Imię/nazwisko są zbyt długie (maks. ' . self::MAX_NAME . ' znaków).';
         }
 
         return $errors;

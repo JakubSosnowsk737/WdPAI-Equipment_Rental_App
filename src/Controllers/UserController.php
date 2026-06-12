@@ -38,7 +38,7 @@ final class UserController extends AbstractController
         $id = (int) ($params['id'] ?? 0);
         if ($id !== Session::userId()) {
             $this->users->delete($id);
-            Session::flash('success', 'Uzytkownik usuniety.');
+            Session::flash('success', 'Użytkownik usunięty.');
         }
         $this->redirect('/admin/users');
     }

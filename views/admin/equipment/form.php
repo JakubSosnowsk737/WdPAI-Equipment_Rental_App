@@ -7,7 +7,7 @@ $isEdit = $eq !== null;
 ob_start();
 ?>
 <section class="form-card">
-    <h2><?= $isEdit ? 'Edytuj sprzet' : 'Dodaj sprzet' ?></h2>
+    <h2><?= $isEdit ? 'Edytuj sprzęt' : 'Dodaj sprzęt' ?></h2>
     <?php if (!empty($errors)): ?>
         <ul class="errors">
             <?php foreach ($errors as $err): ?>
@@ -32,26 +32,26 @@ ob_start();
         <label>Opis
             <textarea name="description" rows="3"><?= htmlspecialchars($eq->description ?? '', ENT_QUOTES) ?></textarea>
         </label>
-        <label>Stawka dzienna (zl)
+        <label>Stawka dzienna (zł)
             <input type="number" step="0.01" min="0" name="daily_rate" value="<?= $eq->dailyRate ?? '' ?>" required>
         </label>
-        <label>Ilosc sztuk
+        <label>Ilość sztuk
             <input type="number" min="1" name="total_quantity" value="<?= $eq->totalQuantity ?? 1 ?>" required>
         </label>
         <button type="submit" class="btn"><?= $isEdit ? 'Zapisz' : 'Dodaj' ?></button>
     </form>
 
     <?php if ($isEdit): ?>
-        <h3>Obrazki</h3>
+        <h3>Zdjęcia</h3>
         <form method="post" enctype="multipart/form-data"
               action="/admin/equipment/<?= (int) $eq->id ?>/images">
             <?= App\Core\Csrf::field() ?>
             <input type="file" name="image" accept="image/*" required>
-            <button type="submit" class="btn">Dodaj obraz</button>
+            <button type="submit" class="btn">Dodaj zdjęcie</button>
         </form>
     <?php endif; ?>
 </section>
 <?php
 $content = ob_get_clean();
-$title = $isEdit ? 'Edycja sprzetu' : 'Nowy sprzet';
+$title = $isEdit ? 'Edycja sprzętu' : 'Nowy sprzęt';
 require __DIR__ . '/../../layout.php';

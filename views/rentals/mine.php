@@ -3,9 +3,9 @@ use App\Models\Rental;
 ob_start();
 ?>
 <section>
-    <h2>Moje wypozyczenia</h2>
+    <h2>Moje wypożyczenia</h2>
     <?php if (empty($rentals)): ?>
-        <p>Brak wypozyczen. <a href="/equipment">Przegladaj katalog</a>.</p>
+        <p>Brak wypożyczeń. <a href="/equipment">Przeglądaj katalog</a>.</p>
     <?php else: ?>
         <table class="data-table">
             <thead>
@@ -17,13 +17,13 @@ ob_start();
                     <td>#<?= (int) $r->id ?></td>
                     <td><?= htmlspecialchars($r->startDate, ENT_QUOTES) ?></td>
                     <td><?= htmlspecialchars($r->endDate, ENT_QUOTES) ?></td>
-                    <td><?= htmlspecialchars($r->status, ENT_QUOTES) ?></td>
-                    <td><?= number_format($r->totalCost, 2) ?> zl</td>
+                    <td><?= htmlspecialchars($r->statusLabel(), ENT_QUOTES) ?></td>
+                    <td><?= number_format($r->totalCost, 2) ?> zł</td>
                     <td>
                         <?php if ($r->status !== 'zakonczone' && $r->status !== 'anulowane'): ?>
                             <form method="post" action="/rentals/<?= (int) $r->id ?>/return" style="display:inline">
                                 <?= App\Core\Csrf::field() ?>
-                                <button class="btn-sm" type="submit">Zwroc</button>
+                                <button class="btn-sm" type="submit">Zwróć</button>
                             </form>
                         <?php endif; ?>
                     </td>
@@ -35,5 +35,5 @@ ob_start();
 </section>
 <?php
 $content = ob_get_clean();
-$title = 'Moje wypozyczenia';
+$title = 'Moje wypożyczenia';
 require __DIR__ . '/../layout.php';

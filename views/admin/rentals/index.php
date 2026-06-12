@@ -3,7 +3,7 @@ use App\Models\Rental;
 ob_start();
 ?>
 <section>
-    <h2>Wszystkie wypozyczenia</h2>
+    <h2>Wszystkie wypożyczenia</h2>
     <table class="data-table">
         <thead>
         <tr><th>ID</th><th>Klient</th><th>Od</th><th>Do</th><th>Status</th><th>Koszt</th><th>Akcje</th></tr>
@@ -15,8 +15,8 @@ ob_start();
                 <td><?= htmlspecialchars($r->customerName ?? '', ENT_QUOTES) ?></td>
                 <td><?= htmlspecialchars($r->startDate, ENT_QUOTES) ?></td>
                 <td><?= htmlspecialchars($r->endDate, ENT_QUOTES) ?></td>
-                <td><?= htmlspecialchars($r->status, ENT_QUOTES) ?></td>
-                <td><?= number_format($r->totalCost, 2) ?> zl</td>
+                <td><?= htmlspecialchars($r->statusLabel(), ENT_QUOTES) ?></td>
+                <td><?= number_format($r->totalCost, 2) ?> zł</td>
                 <td>
                     <?php if ($r->status !== 'zakonczone' && $r->status !== 'anulowane'): ?>
                         <form method="post" action="/rentals/<?= (int) $r->id ?>/return" style="display:inline">
@@ -32,5 +32,5 @@ ob_start();
 </section>
 <?php
 $content = ob_get_clean();
-$title = 'Admin - wypozyczenia';
+$title = 'Wypożyczenia - panel';
 require __DIR__ . '/../../layout.php';

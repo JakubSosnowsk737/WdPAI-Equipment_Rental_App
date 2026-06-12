@@ -21,9 +21,9 @@
     endInput.removeAttribute('required');
     if (native) native.style.display = 'none';
 
-    var MONTHS = ['Styczen', 'Luty', 'Marzec', 'Kwiecien', 'Maj', 'Czerwiec',
-                  'Lipiec', 'Sierpien', 'Wrzesien', 'Pazdziernik', 'Listopad', 'Grudzien'];
-    var DOW = ['Pn', 'Wt', 'Sr', 'Cz', 'Pt', 'So', 'Nd'];
+    var MONTHS = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+                  'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+    var DOW = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
 
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var view  = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -99,12 +99,12 @@
             var q = Math.max(1, parseInt(qty && qty.value, 10) || 1);
             var cost = rate * q * n;
             sum.innerHTML = '<span class="cal-range">' + fmt(startDate) + ' → ' + fmt(endDate) + '</span>' +
-                '<span class="cal-cost">' + n + ' dni · ok. ' + cost.toFixed(2) + ' zl</span>';
+                '<span class="cal-cost">' + n + ' dni · ok. ' + cost.toFixed(2) + ' zł</span>';
         } else if (startDate) {
-            sum.innerHTML = '<span class="cal-range">Poczatek: ' + fmt(startDate) + '</span>' +
-                '<span class="cal-hint">kliknij date konca</span>';
+            sum.innerHTML = '<span class="cal-range">Początek: ' + fmt(startDate) + '</span>' +
+                '<span class="cal-hint">kliknij datę końca</span>';
         } else {
-            sum.innerHTML = '<span class="cal-hint">Wybierz date poczatku, a nastepnie konca</span>';
+            sum.innerHTML = '<span class="cal-hint">Wybierz datę początku, a następnie końca</span>';
         }
         mount.appendChild(sum);
     }

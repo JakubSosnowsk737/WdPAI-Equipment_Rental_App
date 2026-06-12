@@ -50,13 +50,13 @@ final class EquipmentController extends AbstractController
     {
         $id = (int) ($params['id'] ?? 0);
         if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-            Session::flash('error', 'Blad uploadu pliku.');
+            Session::flash('error', 'Błąd przesyłania pliku.');
             $this->redirect('/admin/equipment/' . $id . '/edit');
             return;
         }
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         if (!in_array($ext, ['jpg','jpeg','png','webp'], true)) {
-            Session::flash('error', 'Niedozwolony format obrazka.');
+            Session::flash('error', 'Niedozwolony format zdjęcia.');
             $this->redirect('/admin/equipment/' . $id . '/edit');
             return;
         }
@@ -67,7 +67,7 @@ final class EquipmentController extends AbstractController
         $name = 'eq_' . $id . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
         move_uploaded_file($_FILES['image']['tmp_name'], $dir . '/' . $name);
         $this->images->add($id, '/uploads/' . $name);
-        Session::flash('success', 'Dodano obraz.');
+        Session::flash('success', 'Dodano zdjęcie.');
         $this->redirect('/admin/equipment/' . $id . '/edit');
     }
 
@@ -103,7 +103,7 @@ final class EquipmentController extends AbstractController
             availableQuantity: $total,
         );
         $this->equipment->create($eq);
-        Session::flash('success', 'Dodano sprzet.');
+        Session::flash('success', 'Dodano sprzęt.');
         $this->redirect('/admin/equipment');
     }
 
@@ -172,7 +172,7 @@ final class EquipmentController extends AbstractController
             availableQuantity: $avail,
         );
         $this->equipment->update($id, $eq);
-        Session::flash('success', 'Zaktualizowano sprzet.');
+        Session::flash('success', 'Zaktualizowano sprzęt.');
         $this->redirect('/admin/equipment');
     }
 
@@ -180,7 +180,7 @@ final class EquipmentController extends AbstractController
     {
         $id = (int) ($params['id'] ?? 0);
         $this->equipment->delete($id);
-        Session::flash('success', 'Usunieto sprzet.');
+        Session::flash('success', 'Usunięto sprzęt.');
         $this->redirect('/admin/equipment');
     }
 
@@ -188,13 +188,13 @@ final class EquipmentController extends AbstractController
     private function validate(array $data): array
     {
         $errors = [];
-        if (empty($data['name']))           { $errors[] = 'Nazwa wymagana.'; }
-        if (empty($data['category_id']))    { $errors[] = 'Kategoria wymagana.'; }
+        if (empty($data['name']))           { $errors[] = 'Nazwa jest wymagana.'; }
+        if (empty($data['category_id']))    { $errors[] = 'Kategoria jest wymagana.'; }
         if (!isset($data['daily_rate']) || (float) $data['daily_rate'] < 0) {
-            $errors[] = 'Stawka dzienna musi byc nieujemna.';
+            $errors[] = 'Stawka dzienna musi być nieujemna.';
         }
         if (!isset($data['total_quantity']) || (int) $data['total_quantity'] < 1) {
-            $errors[] = 'Ilosc musi byc dodatnia.';
+            $errors[] = 'Ilość musi być dodatnia.';
         }
         return $errors;
     }

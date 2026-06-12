@@ -6,11 +6,11 @@
     <?php endif; ?>
     <form method="post" action="/login">
         <?= App\Core\Csrf::field() ?>
-        <label>Email<input type="email" name="email" required maxlength="150"></label>
-        <label>Haslo<input type="password" name="password" required></label>
-        <button type="submit" class="btn">Zaloguj</button>
+        <label>Adres e-mail<input type="email" name="email" required maxlength="150" autocomplete="email"></label>
+        <label>Hasło<input type="password" name="password" required autocomplete="current-password"></label>
+        <button type="submit" class="btn">Zaloguj się</button>
     </form>
-    <p><a href="/register">Nie masz konta? Zarejestruj sie</a></p>
+    <p><a href="/register">Nie masz konta? Zarejestruj się</a></p>
 </section>
 <?php
 $content = ob_get_clean();

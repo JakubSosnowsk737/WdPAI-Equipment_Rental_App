@@ -41,4 +41,16 @@ final class Rental
         $end   = new \DateTimeImmutable($this->endDate);
         return (int) $end->diff($start)->days + 1;
     }
+
+    /** Czytelna etykieta statusu po polsku. */
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            self::STATUS_NEW       => 'Nowe',
+            self::STATUS_ACTIVE    => 'Aktywne',
+            self::STATUS_FINISHED  => 'Zakończone',
+            self::STATUS_CANCELLED => 'Anulowane',
+            default                => $this->status,
+        };
+    }
 }

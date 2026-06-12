@@ -44,11 +44,11 @@ final class RentalController extends AbstractController
             endDate:     (string) $this->request->input('end_date', ''),
         );
         if (!$result['ok']) {
-            Session::flash('error', $result['error'] ?? 'Blad wypozyczenia.');
+            Session::flash('error', $result['error'] ?? 'Błąd wypożyczenia.');
             $this->redirect('/equipment');
             return;
         }
-        Session::flash('success', 'Wypozyczenie zalozone.');
+        Session::flash('success', 'Wypożyczenie założone.');
         $this->redirect('/rentals/mine');
     }
 
@@ -66,14 +66,14 @@ final class RentalController extends AbstractController
             $this->render('errors/404', [], 404);
             return;
         }
-        // Klient moze zwrocic wlasne; admin/pracownik dowolne.
+        // Klient może zwrócić własne; admin/pracownik dowolne.
         $role = Session::userRole();
         if ($role === 'klient' && $rental->userId !== (int) Session::userId()) {
             $this->render('errors/403', [], 403);
             return;
         }
         $res = $this->service->returnRental($id);
-        Session::flash($res['ok'] ? 'success' : 'error', $res['ok'] ? 'Sprzet zwrocony.' : ($res['error'] ?? 'Blad zwrotu.'));
+        Session::flash($res['ok'] ? 'success' : 'error', $res['ok'] ? 'Sprzęt zwrócony.' : ($res['error'] ?? 'Błąd zwrotu.'));
         $this->redirect($role === 'klient' ? '/rentals/mine' : '/admin/rentals');
     }
 
