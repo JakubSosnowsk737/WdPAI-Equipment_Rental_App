@@ -26,20 +26,46 @@ final class UserController extends AbstractController
     {
         $id   = (int) ($params['id'] ?? 0);
         $role = (string) $this->request->input('role', User::ROLE_CLIENT);
-        if (in_array($role, [User::ROLE_ADMIN, User::ROLE_EMPLOYEE, User::ROLE_CLIENT], true)) {
-            $this->users->updateRole($id, $role);
-            Session::flash('success', 'Rola zaktualizowana.');
+
+        // Admin nie może zmienić własnej roli (ryzyko utraty dostępu).
+        if ($id === Session::userId()) {
+            Session::flash('error', 'Nie możesz zmienić własnej roli.');
+            $this->redirect('/admin/users');
+            return;
         }
+        if (!in_array($role, [User::ROLE_ADMIN, User::ROLE_EMPLOYEE, User::ROLE_CLIENT], true)) {
+            Session::flash('error', 'Nieprawidłowa rola.');
+            $this->redirect('/admin/users');
+            return;
+        }
+        $this->users->updateRole($id, $role);
+        Session::flash('success', 'Rola zaktualizowana.');
         $this->redirect('/admin/users');
     }
 
     public function delete(array $params): void
     {
         $id = (int) ($params['id'] ?? 0);
-        if ($id !== Session::userId()) {
-            $this->users->delete($id);
-            Session::flash('success', 'Użytkownik usunięty.');
+
+        // Admin nie może usunąć własnego konta.
+        if ($id === Session::userId()) {
+            Session::flash('error', 'Nie możesz usunąć własnego konta.');
+            $this->redirect('/admin/users');
+            return;
         }
+        if ($this->users->findById($id) === null) {
+            Session::flash('error', 'Użytkownik nie istnieje.');
+            $this->redirect('/admin/users');
+            return;
+        }
+        // Nie można usunąć użytkownika powiązanego z wypożyczeniami (FK RESTRICT).
+        if ($this->users->hasRentals($id)) {
+            Session::flash('error', 'Nie można usunąć użytkownika powiązanego z wypożyczeniami.');
+            $this->redirect('/admin/users');
+            return;
+        }
+        $this->users->delete($id);
+        Session::flash('success', 'Użytkownik usunięty.');
         $this->redirect('/admin/users');
     }
 }

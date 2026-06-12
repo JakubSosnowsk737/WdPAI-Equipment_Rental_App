@@ -22,7 +22,7 @@ $role = Session::userRole();
             } catch (e) {}
         })();
     </script>
-    <link rel="stylesheet" href="/css/style.css?v=4">
+    <link rel="stylesheet" href="/css/style.css?v=5">
 </head>
 <body>
     <header class="site-header">

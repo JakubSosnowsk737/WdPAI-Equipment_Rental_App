@@ -43,8 +43,27 @@ ob_start();
 
     <?php if ($isEdit): ?>
         <h3>Zdjęcia</h3>
+        <?php $images = $images ?? []; ?>
+        <?php if (empty($images)): ?>
+            <p class="muted">Brak zdjęć dla tego sprzętu.</p>
+        <?php else: ?>
+            <div class="image-manager">
+                <?php foreach ($images as $img): ?>
+                    <figure class="image-tile">
+                        <img src="<?= htmlspecialchars($img['image_path'], ENT_QUOTES) ?>" alt="">
+                        <form method="post"
+                              action="/admin/equipment/<?= (int) $eq->id ?>/images/<?= (int) $img['id'] ?>/delete"
+                              onsubmit="return confirm('Usunąć to zdjęcie?')">
+                            <?= App\Core\Csrf::field() ?>
+                            <button type="submit" class="btn-sm btn-danger">Usuń</button>
+                        </form>
+                    </figure>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
         <form method="post" enctype="multipart/form-data"
-              action="/admin/equipment/<?= (int) $eq->id ?>/images">
+              action="/admin/equipment/<?= (int) $eq->id ?>/images" class="upload-form">
             <?= App\Core\Csrf::field() ?>
             <input type="file" name="image" accept="image/*" required>
             <button type="submit" class="btn">Dodaj zdjęcie</button>

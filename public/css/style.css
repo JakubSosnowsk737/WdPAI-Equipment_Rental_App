@@ -614,6 +614,49 @@ textarea { resize: vertical; }
 .gallery { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.25rem 0; }
 .gallery img { max-width: 240px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
 
+/* ---------- Menedzer zdjec (panel admina) ---------- */
+.muted { color: var(--text-muted); font-size: .9rem; }
+.role-badge {
+    display: inline-block;
+    padding: .15rem .55rem;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: .8rem;
+    font-weight: 600;
+}
+[data-theme="dark"] .role-badge { color: var(--accent); }
+.image-manager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+}
+.image-tile {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    align-items: center;
+}
+.image-tile img {
+    width: 160px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+}
+.upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+.upload-form .btn { margin-top: 0; }
+
 @media (max-width: 768px) {
     .product { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.25rem; }
 }

@@ -143,6 +143,7 @@ final class EquipmentController extends AbstractController
             'eq'         => $eq,
             'categories' => $this->categories->findAll(),
             'errors'     => [],
+            'images'     => $this->images->allForEquipment($id),
         ]);
     }
 
@@ -156,6 +157,7 @@ final class EquipmentController extends AbstractController
                 'eq'         => $this->equipment->findById($id),
                 'categories' => $this->categories->findAll(),
                 'errors'     => $errors,
+                'images'     => $this->images->allForEquipment($id),
             ], 422);
             return;
         }
@@ -179,9 +181,51 @@ final class EquipmentController extends AbstractController
     public function delete(array $params): void
     {
         $id = (int) ($params['id'] ?? 0);
+        if ($this->equipment->findById($id) === null) {
+            Session::flash('error', 'Sprzęt nie istnieje.');
+            $this->redirect('/admin/equipment');
+            return;
+        }
+        // Nie można usunąć sprzętu powiązanego z wypożyczeniami (FK RESTRICT).
+        if ($this->equipment->isReferencedByRentals($id)) {
+            Session::flash('error', 'Nie można usunąć sprzętu powiązanego z wypożyczeniami. '
+                . 'Usuń lub zakończ powiązane wypożyczenia.');
+            $this->redirect('/admin/equipment');
+            return;
+        }
+        // Najpierw zdjęcia (FK CASCADE i tak by je usunęło, ale czyścimy też pliki z dysku).
+        foreach ($this->images->allForEquipment($id) as $img) {
+            $this->unlinkUpload($img['image_path']);
+        }
         $this->equipment->delete($id);
         Session::flash('success', 'Usunięto sprzęt.');
         $this->redirect('/admin/equipment');
+    }
+
+    public function deleteImage(array $params): void
+    {
+        $equipmentId = (int) ($params['id'] ?? 0);
+        $imageId     = (int) ($params['imageId'] ?? 0);
+
+        $img = $this->images->findById($imageId);
+        // Zdjęcie musi istnieć i należeć do wskazanego sprzętu.
+        if ($img === null || $img['equipment_id'] !== $equipmentId) {
+            $this->render('errors/404', [], 404);
+            return;
+        }
+        $this->unlinkUpload($img['image_path']);
+        $this->images->delete($imageId);
+        Session::flash('success', 'Usunięto zdjęcie.');
+        $this->redirect('/admin/equipment/' . $equipmentId . '/edit');
+    }
+
+    /** Bezpieczne usunięcie pliku z katalogu public/uploads (tylko po nazwie pliku). */
+    private function unlinkUpload(string $imagePath): void
+    {
+        $file = dirname(__DIR__, 2) . '/public/uploads/' . basename($imagePath);
+        if (is_file($file)) {
+            @unlink($file);
+        }
     }
 
     /** @return string[] */

@@ -38,6 +38,7 @@ $router->get('/admin/equipment/{id}/edit',      [EquipmentController::class, 'ed
 $router->post('/admin/equipment/{id}',          [EquipmentController::class, 'update'],       $adminOnly);
 $router->post('/admin/equipment/{id}/delete',   [EquipmentController::class, 'delete'],       $adminOnly);
 $router->post('/admin/equipment/{id}/images',   [EquipmentController::class, 'uploadImage'],  $adminOnly);
+$router->post('/admin/equipment/{id}/images/{imageId}/delete', [EquipmentController::class, 'deleteImage'], $adminOnly);
 
 $router->get('/rentals/new',                    [RentalController::class, 'newForm'],         $loggedOnly);
 $router->post('/rentals',                       [RentalController::class, 'create'],          $loggedOnly);

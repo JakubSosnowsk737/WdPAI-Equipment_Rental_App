@@ -42,7 +42,12 @@ zarządzają sprzętem, wypożyczeniami oraz użytkownikami.
 | **Gość** | Przeglądanie katalogu, dynamiczne wyszukiwanie (Fetch API), filtrowanie po kategorii, szczegóły sprzętu |
 | **Klient** | Rejestracja, logowanie, wypożyczanie sprzętu (kalendarz dat), historia „Moje wypożyczenia", zgłoszenie zwrotu |
 | **Pracownik** | Podgląd wszystkich wypożyczeń, oznaczanie zwrotów |
-| **Administrator** | Wszystko co pracownik + CRUD sprzętu (z wgrywaniem zdjęć), zarządzanie użytkownikami i ich rolami |
+| **Administrator** | Wszystko co pracownik + CRUD sprzętu (wgrywanie i usuwanie zdjęć), zarządzanie użytkownikami i ich rolami |
+
+Administrator nie może zmienić własnej roli ani usunąć własnego konta (blokada
+po stronie serwera i ukrycie kontrolek w panelu). Usunięcie sprzętu lub
+użytkownika powiązanego z wypożyczeniami jest blokowane czytelnym komunikatem
+(zamiast błędu klucza obcego).
 
 ---
 
@@ -308,8 +313,9 @@ Wszystkie żądania modyfikujące stan (`POST`) przechodzą przez **globalny
 | `POST` | `/admin/equipment` | Admin, CSRF | Dodanie sprzętu |
 | `GET`  | `/admin/equipment/{id}/edit` | Admin | Formularz edycji sprzętu |
 | `POST` | `/admin/equipment/{id}` | Admin, CSRF | Aktualizacja sprzętu |
-| `POST` | `/admin/equipment/{id}/delete` | Admin, CSRF | Usunięcie sprzętu |
+| `POST` | `/admin/equipment/{id}/delete` | Admin, CSRF | Usunięcie sprzętu (blokada przy powiązanych wypożyczeniach) |
 | `POST` | `/admin/equipment/{id}/images` | Admin, CSRF | Wgranie zdjęcia sprzętu |
+| `POST` | `/admin/equipment/{id}/images/{imageId}/delete` | Admin, CSRF | Usunięcie zdjęcia sprzętu |
 
 ### Panel personelu (admin lub pracownik)
 

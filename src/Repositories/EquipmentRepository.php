@@ -111,4 +111,14 @@ final class EquipmentRepository extends AbstractRepository
     {
         $this->execute('DELETE FROM equipment WHERE id = :id', ['id' => $id]);
     }
+
+    /** Czy sprzet jest powiazany z jakimkolwiek wypozyczeniem (rental_items)? */
+    public function isReferencedByRentals(int $id): bool
+    {
+        $row = $this->fetchOne(
+            'SELECT 1 FROM rental_items WHERE equipment_id = :id LIMIT 1',
+            ['id' => $id]
+        );
+        return $row !== null;
+    }
 }

@@ -77,4 +77,14 @@ class UserRepository extends AbstractRepository
     {
         $this->execute('DELETE FROM users WHERE id = :id', ['id' => $userId]);
     }
+
+    /** Czy uzytkownik ma powiazane wypozyczenia (FK RESTRICT na rentals)? */
+    public function hasRentals(int $userId): bool
+    {
+        $row = $this->fetchOne(
+            'SELECT 1 FROM rentals WHERE user_id = :id LIMIT 1',
+            ['id' => $userId]
+        );
+        return $row !== null;
+    }
 }
